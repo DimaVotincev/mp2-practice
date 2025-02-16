@@ -5,6 +5,8 @@ using namespace std;
 
 int main()
 {
+    setlocale(LC_ALL, "Russian");
+
     //ListNode<int>* l;
     //l = new ListNode<int>(5);
     //l->next = new ListNode<int>(6);
@@ -26,10 +28,10 @@ int main()
     HeadList<int> h1(l);
     RingHeadList<int> rh(1);
 
-    RingHeadList<int> rh3(rh);
+    /*RingHeadList<int> rh3(rh);
 
 
-    RingHeadList<int> rh12;
+    RingHeadList<int> rh12;*/
 
 
 

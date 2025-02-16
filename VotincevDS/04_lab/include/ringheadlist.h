@@ -22,10 +22,10 @@ public:
 
     
     // доделать это и все что ниже
-    RingHeadList(const RingHeadList<T>& list) { 
+    /*RingHeadList(const RingHeadList<T>& list) { 
         RingHeadList<T> tmp = li
         make_circular();
-    }
+    }*/
 
     /*
     RingHeadList(const ListNode<T>& node) : HeadList(node) {
