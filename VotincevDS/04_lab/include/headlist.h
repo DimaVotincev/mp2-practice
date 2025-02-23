@@ -21,11 +21,14 @@ protected:
             get_pLast()->next = nullptr;
         }
     }
+    
 
 public:
 
-    HeadList() {
-        pHead = new ListNode<T>(0);
+    
+
+    HeadList() : List() {
+        pHead = new ListNode<T>(); // было ListNode<T>(0)
         pHead->next = get_pFirst();
 
     }
@@ -50,7 +53,6 @@ public:
         set_pPrev(pHead);
     }
 
-
     HeadList(const ListNode<T>& node) : List(node) {
         pHead = new ListNode<T>(0);
         pHead->next = get_pFirst();
@@ -62,13 +64,19 @@ public:
         delete pHead;
     }
 
+
+
     ListNode<T>* get_pHead() const { return pHead; }
+
+
+
 
     HeadList<T>& operator=(const List <T>& list) {   
         List<T>::operator=(list);
         pHead = new ListNode<T>(0);
         pHead->next = get_pFirst();
         set_pPrev(pHead);
+        
         return *this;
     }
 
@@ -100,25 +108,32 @@ public:
     };
 
     ListNode<T>* searchLast() const {  
-        if (pFirst == nullptr) {
+        if (get_pFirst() == nullptr) { // было pFirst
             return nullptr;
         }
 
         // прохожу лист поэлементно до pStop
         // и нахожу звено ,у которого  ->next = pStop
-        ListNode<T>* curr = pFirst;
-        while (curr->next != pStop) {
+        ListNode<T>* curr = get_pFirst(); // было pFirst
+        while (curr->next !=  get_pStop()) { // было pStop
             curr = curr->next;
         }
         return curr;
     };
 
+
+    // функция "логичная" для стеков
+    // для headlist и ringlist
+    // может сбить с толку (но пока пусть будет)
     void push(const T& key) {
         //   добавляет элемент с заданным значением
         //   в начало списка
         ListNode<T>* tmp = new ListNode<T>(key);
         pushFront(tmp);
     }
+
+
+
 
     void pushFront(ListNode<T>* node) {   
         List<T>::pushFront(node);

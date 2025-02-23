@@ -5,11 +5,16 @@ using namespace std;
 
 template <typename T>
 struct ListNode {
-    T val;
+    /*T val;
     int degree;
     ListNode* next;
     ListNode() : val(0),degree(-1) next(nullptr) {}
-    ListNode(const T& x) : val(x),degree(-1), next(nullptr) {}
+    ListNode(const T& x) : val(x),degree(-1), next(nullptr) {}*/
+
+    T val;  
+    ListNode* next;
+    ListNode() : val(T()), next(nullptr) {}
+    ListNode(const T& x) : val(x), next(nullptr) {}
 
 };
 
@@ -92,8 +97,8 @@ public:
     }
 
 
-
-    List(ListNode<T>* node) : List() {        // ++
+    // & ??? 
+    List(const ListNode<T>* node) : List() {        // ++
         // если поступил пустой node
         if (node == nullptr) {
             return;
@@ -106,7 +111,10 @@ public:
 
         // обхожу поэлементно, заполн€€ список
         ListNode<T>* curr = node->next;
-        while (curr != nullptr) {
+
+        // второе условие нужно дл€ ringlist
+        // (без этого услови€ не будет работать ringlist!!)
+        while (curr != pStop && curr->next != node) {
             pCurr->next = new ListNode<T>(curr->val);
             pPrev = pCurr;
             pCurr = pCurr->next;
@@ -143,7 +151,6 @@ public:
 
 
     // ----------- пока не знаю
-
 
 
 
@@ -203,6 +210,9 @@ public:
             pCurr = pCurr->next;
             curr = curr->next;
         }
+        pLast = pCurr;
+        reset_pCurr();
+
         return *this;
     }
 
@@ -223,13 +233,20 @@ public:
     }
 
 
-
-    ListNode<T>* get_head() const {  //  ???????? уже есть get_pFirst()
+    
+    // (он используетс€ в листстеке,
+    // просто нужно помен€ть в нем функцию и все)
+    ListNode<T>* get_head() const {       //  ???????? уже есть get_pFirst()
         return pFirst;
     }
 
 
-
+    // должен использовать pCurr , pPrev ?
+    // если использует,то мен€ет значени€
+    // и если будет код с направленным изменением pCurr
+    // то search изменит pCurr  
+    // (возможно, изменение pCurr на пр€мую нужно запретить
+    //  и тогда изменить search)
     ListNode<T>* search(T key) const {   //  ++
         // обхожу исходный список поэлементно
         // и сравниваю ключи с входным ключом
@@ -316,8 +333,8 @@ public:
         }
         
         pLast->next = node;
-        // pLast = pLast->next;
-        pLast =  searchLast();
+        pLast = pLast->next;
+        // pLast =  searchLast();   // возможно нужно это оставить
 
     };
 
