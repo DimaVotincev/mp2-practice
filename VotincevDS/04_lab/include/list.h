@@ -15,6 +15,7 @@ struct ListNode {
     ListNode* next;
     ListNode() : val(T()), next(nullptr) {}
     ListNode(const T& x) : val(x), next(nullptr) {}
+    ListNode(const T& x, ListNode* _next) : val(x), next(_next) {}
 
 };
 
@@ -22,7 +23,7 @@ struct ListNode {
 template<typename T>
 class List
 {
-private:
+protected:
     ListNode<T>* pFirst;
     ListNode<T>* pCurr;
     ListNode<T>* pPrev;
@@ -217,7 +218,7 @@ public:
     }
 
 
-
+    // !! TODO
     void reset_pCurr() {            // ++
         // сбрасывает pCurr по умолчанию
         // (соответственно и pPrev)
@@ -250,7 +251,7 @@ public:
     ListNode<T>* search(T key) const {   //  ++
         // обхожу исходный список поэлементно
         // и сравниваю ключи с входным ключом
-        ListNode<T>* curr = pFirst;
+        ListNode<T>* curr = pFirst; // !! TODO: pCurr, pPrev
         while (curr != pStop) {
             if (curr->val == key) {
                 return curr;
@@ -266,7 +267,7 @@ public:
     };
 
 
-
+    // !! TODO: remove
     ListNode<T>* searchLast() const {   //++
         if (pFirst == nullptr) {
             return nullptr;
@@ -294,7 +295,7 @@ public:
 
     // лучше сделать так, чтобы он добавлял
     // не только 1 звено,а как в pushBack
-    void pushFront(ListNode<T>* node) {   // ++
+    virtual void pushFront(ListNode<T>* node) {   // ++
 
         if(node == nullptr) {
             throw "cant push null node in front";
@@ -305,7 +306,7 @@ public:
             pFirst = node;
             pCurr = pFirst;
             pPrev = pStop;
-            pLast = searchLast();
+            pLast = searchLast(); // !! TODO: remove
             return;
         }
         
@@ -317,18 +318,18 @@ public:
 
 
 
-    void pushBack(ListNode<T>* node) {  // ++
+    virtual void pushBack(ListNode<T>* node) {  // ++
 
         // добавление пустого в конец не меняет список
         if (node == nullptr) {
             return;
         }
         
-        if (pFirst == nullptr) {
+        if (pFirst == nullptr) { // !! TODO: pushFront
             pFirst = node;
             pCurr = pFirst;
             pPrev = pStop;
-            pLast = searchLast();
+            pLast = pFirst;
             return;
         }
         
@@ -342,7 +343,7 @@ public:
 
     void InsertAfter(ListNode<T>* node, T key) {             // ++
         // ищу ключ с заданным значением 
-        ListNode<T>* curr = search(key);
+        ListNode<T>* curr = search(key); // !! pCurr
         // если ключа нет,то search бросает исключение
 
         if (node->next != nullptr) {
@@ -362,10 +363,10 @@ public:
        
     };
 
-    void InsertBefore(ListNode<T>* node, T key) {       // ++
+    virtual void InsertBefore(ListNode<T>* node, T key) {       // ++
 
         // ищу элемент с заданным ключом и элемент перед ним
-        ListNode<T>* prev = pStop,*curr = pFirst;
+        ListNode<T>* prev = pStop,*curr = pFirst; // !! TODO: search
         while (curr != pStop && curr->val != key) {
             prev = curr;
             curr = curr->next;
@@ -399,7 +400,7 @@ public:
         // нахожу звено со значением key
         // и предыдущее звено
         ListNode<T>* prev = pStop, * curr = pFirst;
-        while (curr != pStop && curr->val != key) {
+        while (curr != pStop && curr->val != key) { // !! TODO: search
             prev = curr;
             curr = curr->next;
         }
@@ -410,7 +411,7 @@ public:
         }
 
         // звено с ключом key первое
-        if (prev == pStop) {
+        if (prev == pStop) { // !! RemoveFirst
             ListNode<T>* tmp = pFirst;
             pFirst = pFirst->next;
             pCurr = pFirst;
@@ -441,7 +442,7 @@ public:
 
 
 
-    void RemoveFirst() {           // ++
+    virtual void RemoveFirst() {           // ++
         
         if (pFirst == nullptr) {
             throw "removing element from empty list";

@@ -33,7 +33,7 @@ public:
         
     }
     
-    Monom& operator=(const Monom& m){
+    const Monom& operator=(const Monom& m){
         coeff = m.coeff;
         degree = m.degree;
     }
@@ -48,23 +48,19 @@ public:
     }
 
     bool operator>(const Monom& m) const {
-        return coeff > m.coeff &&
-            degree > m.degree;
+        return degree > m.degree;
     }
 
     bool operator>=(const Monom& m) const {
-        return coeff >= m.coeff &&
-            degree >= m.degree;
+        return degree >= m.degree;
     }
 
     bool operator<(const Monom& m) const {
-        return coeff < m.coeff &&
-            degree < m.degree;
+        return degree < m.degree;
     }  
 
     bool operator<=(const Monom& m) const {
-        return coeff <= m.coeff &&
-            degree <= m.degree;
+        return degree <= m.degree;
     }
 };
 

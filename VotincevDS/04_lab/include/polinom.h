@@ -5,6 +5,7 @@
 
 class Polinom : public Monom {
 private:
+    std::string name;
     RingHeadList<Monom> polinom;
 public:
     
@@ -12,7 +13,8 @@ public:
         
     }
 
-    Polinom(std::string str) {
+    Polinom(const std::string& str) {
+        name = str;
         ArithmeticExpression expr(str);
         // vector<std::string> monoms = expr.convert();
     }

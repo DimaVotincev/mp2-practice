@@ -3,11 +3,12 @@
 
 template <typename T>
 class HeadList : public List<T> {
-private:
+protected:
     ListNode<T>* pHead;
 
 protected:
 
+    // !!! TODO + имеем доступ к полям
     void make_circular() {
         set_pStop(pHead);
         if (get_pLast() != nullptr) {
@@ -28,16 +29,13 @@ public:
     
 
     HeadList() : List() {
-        pHead = new ListNode<T>(); // было ListNode<T>(0)
-        pHead->next = get_pFirst();
-
+        pHead = new ListNode<T>(0, pFirst);
     }
 
 
     HeadList(const T& x) : List(x) {
-        pHead = new ListNode<T>(0);
-        pHead->next = get_pFirst();
-        set_pPrev(pHead);
+        pHead = new ListNode<T>(0, pFirst);
+        pPrev = pHead;
     }
 
 
@@ -89,24 +87,6 @@ public:
     }
 
 
-    ListNode<T>* search(T key) const {   
-        // обхожу исходный список поэлементно
-        // и сравниваю ключи с входным ключом
-        ListNode<T>* curr = this->get_pFirst();
-        while (curr != this->get_pStop()) {
-            if (curr->val == key) {
-                return curr;
-            }
-            curr = curr->next;
-        }
-
-        // не нашелся ключ
-        if (curr == this->get_pStop()) {
-            throw "this element does not exist";
-        }
-        return curr;
-    };
-
     ListNode<T>* searchLast() const {  
         if (get_pFirst() == nullptr) { // было pFirst
             return nullptr;
@@ -121,45 +101,32 @@ public:
         return curr;
     };
 
-
-    // функция "логичная" для стеков
-    // для headlist и ringlist
-    // может сбить с толку (но пока пусть будет)
-    void push(const T& key) {
-        //   добавляет элемент с заданным значением
-        //   в начало списка
-        ListNode<T>* tmp = new ListNode<T>(key);
-        pushFront(tmp);
-    }
-
-
-
-
     void pushFront(ListNode<T>* node) {   
         List<T>::pushFront(node);
-        set_pPrev(pHead);
+        pPrev = pHead;
         pHead->next = node;
         return;
     };
 
 
-    void pushBack(ListNode<T>* node) {  
+    virtual void pushBack(ListNode<T>* node) {  
         List<T>::pushBack(node);
-        set_pPrev(pHead);
-        pHead->next = get_pFirst();
+        if (pFirst == node)
+        {
+            pPrev = pHead;
+            pHead->next = pFirst;
+        }
         return;
     };
 
-    void InsertAfter(ListNode<T>* node, T key) { 
-        List<T>::InsertAfter(node, key);
-        set_pPrev(pHead);
-        pHead->next = get_pFirst();
-    };
 
-    void InsertBefore(ListNode<T>* node, T key) { 
+    virtual void InsertBefore(ListNode<T>* node, T key) { 
         List<T>::InsertBefore(node, key);
-        set_pPrev(pHead);
-        pHead->next = get_pFirst();
+        if (pFirst == node)
+        {
+            pPrev = pHead;
+            pHead->next = pFirst;
+        }
     };
 
 
@@ -173,7 +140,7 @@ public:
         return List<T>::size();
     };
 
-    void RemoveFirst() {           
+    virtual void RemoveFirst() {           
         List<T>::RemoveFirst();
         set_pPrev(pHead);
         pHead->next = get_pFirst();
