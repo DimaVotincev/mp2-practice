@@ -1,7 +1,7 @@
 #include <iostream>
 #include "headlist.h"
 #include "ringheadlist.h"
-#include "polinom.h"
+
 using namespace std;
 
 int main()
@@ -41,7 +41,7 @@ int main()
     h6 = h5;
 
     ListNode<int>* lfvalue;
-    lfvalue = h6.searchLast();
+    //lfvalue = h6.searchLast();
 
 
     RingHeadList<int> h7(h6);

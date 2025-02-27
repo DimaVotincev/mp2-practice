@@ -23,6 +23,26 @@ struct ListNode {
 template<typename T>
 class List
 {
+private:
+   
+    ListNode<T>* searchLast() const { //!! TODO: remove
+        if (pFirst == nullptr) {
+            return nullptr;
+        }
+
+        ListNode<T>* curr = pFirst;
+        while (curr->next != nullptr) {
+            curr = curr->next;
+        }
+        return curr;
+    };
+    // переместил в private , а не убрал
+    // тк удобно в местах ставить навигацию: pLast = searchLast
+    // без этой функции везде, где используетс€ эта функци€,
+    // придетс€ вставл€ть цикл, код будет больше
+
+
+
 protected:
     ListNode<T>* pFirst;
     ListNode<T>* pCurr;
@@ -57,16 +77,15 @@ public:
             return;
         }
 
-        // определ€ю значение pFirst как 1й элемент списка
-        // и назначаю pCurr по умолчанию (на pFirst)
         pFirst = new ListNode<T>(list.pFirst->val);
         pCurr = pFirst;  
-
+        pStop = nullptr;
+        pPrev = pStop;
         // обхожу входной лист
         ListNode<T>* curr = list.pFirst->next;
 
         // если входной лист имел 1 элемент
-        if (curr == nullptr) {
+        if (curr == pStop) {
             pLast = pFirst;
             return;
         }
@@ -80,25 +99,10 @@ public:
         }
         pPrev->next = pCurr;
         pLast = pCurr;
-
-        // сбрасываетс€ pCurr 
-        // pCurr = pFirst;
-        // pPrev = pStop; 
-        reset_pCurr();
-
-
-        //     это можно сделать здесь
-        //     (тк до конструктора не мб изменен
-        //     pCurr и pPrev , они оба nullptr)
-        //  
-        // 
-        //    например, в методе search нельз€ тк
-        //    если раннее был изменен pCurr ,то он
-        //    снова сброситс€ на начальный момент             
+        pCurr = pFirst;
+        pPrev = pStop;
     }
 
-
-    // & ??? 
     List(const ListNode<T>* node) : List() {        // ++
         // если поступил пустой node
         if (node == nullptr) {
@@ -121,7 +125,10 @@ public:
             pCurr = pCurr->next;
             curr = curr->next;
         }
-        pPrev->next = pCurr;
+        if (pPrev) {
+            pPrev->next = pCurr;
+        }
+        
         pLast = pCurr;
         reset_pCurr();
     }
@@ -150,35 +157,6 @@ public:
     }
 
 
-
-    // ----------- пока не знаю
-
-
-
-    ListNode<T>* get_pFirst() const { return pFirst; }
-    void set_pFirst(ListNode<T>* node) { 
-        pFirst = node; 
-    }
-
-    ListNode<T>* get_pCurr()  const  { return pCurr; }
-    void set_pCurr(ListNode<T>* node) { 
-        pCurr = node; 
-    }
-
-    ListNode<T>* get_pPrev() const { return pPrev; }
-    void set_pPrev(ListNode<T>* node) { 
-        pPrev = node; 
-    }
-
-    ListNode<T>* get_pLast() const { return pLast; }
-    void set_pLast(ListNode<T>* node) { pLast = node; }
-
-    ListNode<T>* get_pStop() const { return pStop; }
-    void set_pStop(ListNode<T>* node) { pStop = node; }
-
-
-
-    // ----------- пока не знаю
 
 
 
@@ -218,7 +196,7 @@ public:
     }
 
 
-    // !! TODO
+    // !! TODO (€ не пон€л это туду но наверное этот метод не нужен)
     void reset_pCurr() {            // ++
         // сбрасывает pCurr по умолчанию
         // (соответственно и pPrev)
@@ -235,57 +213,54 @@ public:
 
 
     
-    // (он используетс€ в листстеке,
-    // просто нужно помен€ть в нем функцию и все)
-    ListNode<T>* get_head() const {       //  ???????? уже есть get_pFirst()
+    // используетс€ в лист стеке
+    ListNode<T>* get_head() const {       
         return pFirst;
     }
 
 
-    // должен использовать pCurr , pPrev ?
-    // если использует,то мен€ет значени€
-    // и если будет код с направленным изменением pCurr
-    // то search изменит pCurr  
-    // (возможно, изменение pCurr на пр€мую нужно запретить
-    //  и тогда изменить search)
-    ListNode<T>* search(T key) const {   //  ++
+    
+    
+
+
+
+
+
+
+    // --------------------------------------------------------
+    //      если метод search будет const  тогда:
+    // вызовем дл€ списка  1 2 3 4 5 и найдем элемент 3
+    // pCurr будет на 3
+    // а теперь вызовем ещЄ раз и попробуем найти 1
+    // но pCurr теперь находитс€ на 3 ,он не может быть сброшен
+    //      если метод search оставить const  тогда:
+    // нельз€ использовать pCurr    
+    // --------------------------------------------------------
+    ListNode<T>* search(T key)  {   //  ++
         // обхожу исходный список поэлементно
         // и сравниваю ключи с входным ключом
-        ListNode<T>* curr = pFirst; // !! TODO: pCurr, pPrev
-        while (curr != pStop) {
-            if (curr->val == key) {
-                return curr;
+
+        pCurr = pFirst;
+        pPrev = pStop;
+        
+        while (pCurr != pStop) {
+            if (pCurr->val == key) {
+                return pCurr;
             }
-            curr = curr->next;
+            pPrev = pCurr;
+            pCurr = pCurr->next;
         }
 
         // не нашелс€ ключ
-        if (curr == pStop) {
+        if (pCurr == pStop) {
             throw "this element does not exist";
         }
-        return curr;
+        return pCurr;
     };
-
-
-    // !! TODO: remove
-    ListNode<T>* searchLast() const {   //++
-        if (pFirst == nullptr) {
-            return nullptr;
-        }
-
-        // прохожу лист поэлементно до pStop
-        // и нахожу звено ,у которого  ->next = pStop
-        ListNode<T>* curr = pFirst;
-        while (curr->next != pStop) {
-            curr = curr->next;
-        }
-        return curr;
-    };
-
 
     
 
-    void push(const T& key) {
+    void push(const T& key) {    // ++
         //   добавл€ет элемент с заданным значением
         //   в начало списка
         ListNode<T>* tmp = new ListNode<T>(key);
@@ -306,7 +281,7 @@ public:
             pFirst = node;
             pCurr = pFirst;
             pPrev = pStop;
-            pLast = searchLast(); // !! TODO: remove
+            pLast = searchLast(); // !! TODO: remove searchlast
             return;
         }
         
@@ -316,7 +291,8 @@ public:
         pPrev = pStop;
     };
 
-
+   
+    
 
     virtual void pushBack(ListNode<T>* node) {  // ++
 
@@ -325,25 +301,21 @@ public:
             return;
         }
         
-        if (pFirst == nullptr) { // !! TODO: pushFront
-            pFirst = node;
-            pCurr = pFirst;
-            pPrev = pStop;
-            pLast = pFirst;
+        // если изначально лист пустой
+        if (pFirst == nullptr) {        // !! TODO: pushFront
+            this->pushFront(node);
             return;
         }
-        
+
         pLast->next = node;
         pLast = pLast->next;
-        // pLast =  searchLast();   // возможно нужно это оставить
-
     };
 
 
 
     void InsertAfter(ListNode<T>* node, T key) {             // ++
         // ищу ключ с заданным значением 
-        ListNode<T>* curr = search(key); // !! pCurr
+        ListNode<T>* pCurr = search(key); // !! pCurr
         // если ключа нет,то search бросает исключение
 
         if (node->next != nullptr) {
@@ -351,14 +323,14 @@ public:
         }
 
         // вставл€ю node после звена с ключом key
-        node->next = curr->next;
+        node->next = pCurr->next;
 
         // измен€ю значение pLast, если происходит pushBack
-        if (curr->next == pStop) {
+        if (pCurr->next == pStop) {
             pLast = node;
         }
 
-        curr->next = node;
+        pCurr->next = node;
 
        
     };

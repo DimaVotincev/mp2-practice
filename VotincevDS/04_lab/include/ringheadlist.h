@@ -38,45 +38,21 @@ public:
     
     
     RingHeadList<T>& operator=(const List <T>& list) {
-        HeadList<T>::operator=(list);
-        
+        HeadList<T>::operator=(list);       
         make_circular();
         return *this;
     }
     
     RingHeadList<T>& operator=(const RingHeadList <T>& list) {
-        HeadList<T>::operator=(list.get_pFirst());
+        HeadList<T>::operator=(HeadList(list.get_pHead()->next));
         make_circular();
         return *this;
     }
     
-
-    ListNode<T>* search(T key) const {
-        return HeadList<T>::search(key);
-    };
-    
-    ListNode<T>* searchLast() const {
-        return HeadList<T>::searchLast();
-    };
-    
-
-
-
-    // функция "логичная" для стеков
-    // для headlist и ringlist
-    // может сбить с толку (но пока пусть будет)
-    void push(const T& key) {
-        HeadList<T>::push(key);
-        ////   добавляет элемент с заданным значением
-        ////   в начало списка
-        //ListNode<T>* tmp = new ListNode<T>(key);
-        //pushFront(tmp);
-    }
-
-
     
     void pushFront(ListNode<T>* node) {
         HeadList<T>::pushFront(node);
+        make_circular();
     };
 
     
@@ -92,17 +68,7 @@ public:
 
 
 
-
-
-
-    //------------------------------
-    // кажется, писать реализацию 
-    // след метод нет необходимости
-    // тк и так вызываются методы
-    // класса предка
-
-
-    /*
+    
     void InsertBefore(ListNode<T>* node, T key) {
         HeadList<T>::InsertBefore(node, key);
         make_circular();
@@ -111,8 +77,7 @@ public:
 
     void remove(T key) {
         HeadList<T>::remove(key);
-        set_pPrev(pHead);
-        pHead->next = get_pFirst();
+        pHead->next = get_pHead();
     };
 
     size_t size() const {
@@ -120,14 +85,13 @@ public:
     };
 
     void RemoveFirst() {
-        HeadList<T>::RemoveFirst();
-        set_pPrev(pHead);
-        pHead->next = get_pFirst();
+        HeadList<T>::RemoveFirst();    
+        pHead->next = get_pHead();
     }
 
 
     bool operator==(const RingHeadList<T>& s) const {
-        return HeadList<T>::operator==(HeadList<T>(s.get_pFirst()));
+        return HeadList<T>::operator==(HeadList<T>(s.get_pHead()->next));
     }
 
 
@@ -136,5 +100,5 @@ public:
         return !(*this == s);
     }
 
-    */
+    
 };
