@@ -94,7 +94,7 @@ TEST(HeadList, cant_search_not_existing_elem)
     ListNode<int>* node = new ListNode<int>(5);
     node->next = new ListNode<int>(6);
     HeadList.pushBack(node);
-    ASSERT_ANY_THROW(HeadList.search(7));
+    EXPECT_TRUE(HeadList.search(7) == nullptr);
 }
 
 TEST(HeadList, double_search_works_correctly)

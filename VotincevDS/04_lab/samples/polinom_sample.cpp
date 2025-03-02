@@ -1,12 +1,47 @@
 #include <iostream>
-#include "headlist.h"
-#include "ringheadlist.h"
-
+#include "polinom.h"
 using namespace std;
 
 int main()
 {
     setlocale(LC_ALL, "Russian");
+    /*
+    "-123x^3y^2z^6+x^5yz^3-y^2z^3-z^2x^3"
+    "xyz + x + y + z"
+    "x+y"
+    "2,2x+y"
+    */
+    string polinomStr = "2,2x+y";
+    // cout << "Введите полином";
+    // getline(cin, polinomStr);
+
+    Polinom polinom(polinomStr);
+    Polinom p1(polinom * polinom);
+
+    return 1;
+
+
+
+
+
+    //
+    // сделать тесты к полиному, моному
+    // приложение
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
 
     //ListNode<int>* l;
     //l = new ListNode<int>(5);
@@ -22,63 +57,51 @@ int main()
     //h2.pushBack(nullptr);
 
 
-    ListNode<int>* l;
-    l = new ListNode<int>(5);
-    l->next = new ListNode<int>(6);
-    l->next->next = new ListNode<int>(7);
-    
-    RingHeadList<int> h1;
-    RingHeadList<int> h2(1);
-    RingHeadList<int> h3(l);
-    RingHeadList<int> h4(h3);
+    //ListNode<int>* l;
+    //l = new ListNode<int>(5);
+    //l->next = new ListNode<int>(6);
+    //l->next->next = new ListNode<int>(7);
+    //
+    //RingHeadList<int> h1;
+    //RingHeadList<int> h2(1);
+    //RingHeadList<int> h3(l);
+    //RingHeadList<int> h4(h3);
 
 
-    List<int> l1(l);
+    //List<int> l1(l);
 
-    RingHeadList<int> h5;
-    h5 = l1;
-    RingHeadList<int> h6;
-    h6 = h5;
+    //RingHeadList<int> h5;
+    //h5 = l1;
+    //RingHeadList<int> h6;
+    //h6 = h5;
 
-    ListNode<int>* lfvalue;
-    //lfvalue = h6.searchLast();
-
-
-    RingHeadList<int> h7(h6);
-    h7.push(8);
-
-    RingHeadList<int> h8(h6);
-    ListNode<int>* nodetoadd1 = new ListNode<int>(4);
-    h8.pushFront(nodetoadd1);
-
-    RingHeadList<int> h9(h6);
-    ListNode<int>* nodetoadd2 = new ListNode<int>(8);
-    h9.pushBack(nodetoadd2);
-
-    RingHeadList<int> h10(h6);
-    ListNode<int>* nodetoadd3 = new ListNode<int>(10);
-    h10.InsertBefore(nodetoadd3,6);
+    //ListNode<int>* lfvalue;
+    ////lfvalue = h6.searchLast();
 
 
-    RingHeadList<int> h11(h6);
-    RingHeadList<int> h12(h6);
-    cout << (h11 == h12);
+    //RingHeadList<int> h7(h6);
+    //h7.push(8);
 
-    return 1;
+    //RingHeadList<int> h8(h6);
+    //ListNode<int>* nodetoadd1 = new ListNode<int>(4);
+    //h8.pushFront(nodetoadd1);
 
+    //RingHeadList<int> h9(h6);
+    //ListNode<int>* nodetoadd2 = new ListNode<int>(8);
+    //h9.pushBack(nodetoadd2);
 
-
-
-
-
-
-
-
-
-
+    //RingHeadList<int> h10(h6);
+    //ListNode<int>* nodetoadd3 = new ListNode<int>(10);
+    //h10.InsertBefore(nodetoadd3,6);
 
 
+    //RingHeadList<int> h11(h6);
+    //RingHeadList<int> h12(h6);
+    //cout << (h11 == h12);
 
+    // вроде как навигация правильная
+    // теперь надо с чуством того,что ринглист сделан правильно
+    // делать полином
 
 
     //RingHeadList<int> rh(l);

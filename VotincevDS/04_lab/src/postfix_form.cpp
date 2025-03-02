@@ -21,11 +21,15 @@ vector<string> ArithmeticExpression::convert(const string& input) {
     string expr = removeSpaces(input);
     vector<string> answ;
 
+    // контролирует ситуацию с первым введем символом операции
+    int first_input = 1;
 
     string operand_name;
     for (size_t i = 0; i < expr.length(); ++i) {
         string c;
         c.push_back(expr[i]);
+
+
         if (c == "(" || c == ")") {
             if (is_op(operand_name) && c == ")") {
                 throw "wrong expr";
@@ -42,9 +46,11 @@ vector<string> ArithmeticExpression::convert(const string& input) {
             answ.push_back(c);
             continue;
         }
+
+
         if (is_op(c)) {
             if (!operand_name.empty()) {
-                answ.push_back(operand_name);
+                answ.push_back(operand_name);               
             }
 
             if (answ.empty()) {
@@ -52,6 +58,12 @@ vector<string> ArithmeticExpression::convert(const string& input) {
                     throw "wrong expression";
                 }
                 operand_name += c;
+                if (first_input == 1) {
+                    first_input = 0;
+                    answ.push_back(operand_name);
+                    operand_name.clear();
+                    continue;
+                }
                 continue;
             }
             if (is_op(answ[answ.size() - 1])) {
@@ -72,8 +84,9 @@ vector<string> ArithmeticExpression::convert(const string& input) {
             operand_name.clear();
             continue;
         }
-        operand_name += c;
 
+
+        operand_name += c;
     }
 
     if (!operand_name.empty()) {

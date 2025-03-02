@@ -93,7 +93,7 @@ TEST(LIST, cant_search_not_existing_elem)
     ListNode<int>* node = new ListNode<int>(5);
     node->next = new ListNode<int>(6);
     list.pushBack(node);
-    ASSERT_ANY_THROW(list.search(7));
+    EXPECT_TRUE(list.search(7) == nullptr);
 }
 
 TEST(LIST, double_search_works_correctly)

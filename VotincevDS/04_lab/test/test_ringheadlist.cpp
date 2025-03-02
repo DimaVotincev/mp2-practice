@@ -97,7 +97,7 @@ TEST(RingHeadList, cant_search_not_existing_elem)
     ListNode<int>* node = new ListNode<int>(5);
     node->next = new ListNode<int>(6);
     RingHeadList.pushBack(node);
-    ASSERT_ANY_THROW(RingHeadList.search(7));
+    EXPECT_TRUE(RingHeadList.search(7) == RingHeadList.get_pHead());
 }
 
 TEST(RingHeadList, double_search_works_correctly)
