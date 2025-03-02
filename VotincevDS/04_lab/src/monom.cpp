@@ -53,6 +53,29 @@ Monom Monom::operator-(const Monom& p)
 
 Monom Monom::operator*(const Monom& p)
 {
+    int x, px;
+    x = degree / 100;
+    px = p.degree / 100;
+
+    if ((x+px) > 9) {
+        throw "degree is greater than 9";
+    }
+
+    int y, py;
+    y = ((degree - 100 * (degree / 100)) / 10);
+    py = ((p.degree - 100 * (p.degree / 100)) / 10);
+    if ((y+py) > 9) {
+        throw "degree is greater than 9";
+    }
+
+    int z, pz;
+    z = degree % 10;
+    pz = p.degree % 10;
+    if ((z+pz) > 9) {
+        throw "degree is greater than 9";
+    }
+
+
     return Monom(coeff * p.coeff, degree + p.degree);
 }
 
