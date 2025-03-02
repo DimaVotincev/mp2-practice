@@ -1,4 +1,6 @@
 
+
+
 #include <gtest.h>
 #include "monom.h"
 
@@ -287,3 +289,4 @@ TEST(Monom, operator_NotEqual_is_correct)
     EXPECT_TRUE(Monom1 != Monom2);
 
 }
+

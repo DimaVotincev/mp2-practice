@@ -28,8 +28,8 @@ bool is_correct_seq(const char c1, const char c2) {
     return 0;
 
 
-    // возможные и невозможные комбинации
-        /*
+    // возможные и невозможные комбинации:
+    /*
         ЦЦ   +
         ПП   +
         П ^  +
@@ -39,5 +39,18 @@ bool is_correct_seq(const char c1, const char c2) {
         ПЦ   -      
         ^П   -
         ^^   -
-        */ 
+    */ 
+}
+
+
+char get_oper() {
+    char oper;
+    cin >> oper;
+    cin.ignore();
+    while (oper != '+' && oper != '-' && oper != '*') {
+        cout << "\tВозможны только операции - + *. Введите другую\n";
+        cin >> oper;
+        cin.ignore();
+    }
+    return oper;
 }
