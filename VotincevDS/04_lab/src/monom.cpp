@@ -1,9 +1,6 @@
 #include "monom.h"
 
 
-
-
-
 Monom::Monom() {
     coeff = 0;
     degree = -1;
@@ -24,11 +21,6 @@ Monom::Monom(const Monom& m) {
     degree = m.degree;
 }
 
-Monom::~Monom() {
-
-}
-
-
 Monom Monom::operator+(const Monom& p)
 {
     if (degree == p.degree) {
@@ -38,7 +30,6 @@ Monom Monom::operator+(const Monom& p)
         throw "monoms has diff degree";
     }
 }
-
 
 Monom Monom::operator-(const Monom& p)
 {
@@ -50,28 +41,27 @@ Monom Monom::operator-(const Monom& p)
     }
 }
 
-
 Monom Monom::operator*(const Monom& p)
 {
     int x, px;
     x = degree / 100;
     px = p.degree / 100;
 
-    if ((x+px) > 9) {
+    if ((x + px) > 9) {
         throw "degree is greater than 9";
     }
 
     int y, py;
     y = ((degree - 100 * (degree / 100)) / 10);
     py = ((p.degree - 100 * (p.degree / 100)) / 10);
-    if ((y+py) > 9) {
+    if ((y + py) > 9) {
         throw "degree is greater than 9";
     }
 
     int z, pz;
     z = degree % 10;
     pz = p.degree % 10;
-    if ((z+pz) > 9) {
+    if ((z + pz) > 9) {
         throw "degree is greater than 9";
     }
 
@@ -79,38 +69,12 @@ Monom Monom::operator*(const Monom& p)
     return Monom(coeff * p.coeff, degree + p.degree);
 }
 
-
-
-Monom Monom::operator+(double p)
-{
-    if (degree == 0) {
-        return Monom(coeff + p, degree);
-    }
-    else {
-        throw "monoms has diff degree";
-    }
-}
-
-
-Monom Monom::operator-(double p)
-{
-    if (degree == 0) {
-        return Monom(coeff - p, degree);
-    }
-    else {
-        throw "monoms has diff degree";
-    }
-}
-
-
 Monom Monom::operator*(double p)
 {
     return Monom(coeff * p, degree);
 }
 
-
-
-string Monom::Monom_tostr() {
+string Monom::Monom_tostr() const {
     string answ;
     if (coeff > 0) {
         answ += "+";
@@ -174,26 +138,18 @@ string Monom::Monom_tostr() {
     return answ;
 }
 
-
-
-bool Monom::operator==(double c) const {
-    return  (abs(coeff - c) <= 0.000001);
-}
-
-bool Monom::operator!=(double c) const {
-    return !(*this == c);
-}
-
-
 const Monom& Monom::operator=(const Monom& m) {
+    if (this == &m)
+    {
+        return *this;
+    }
     coeff = m.coeff;
     degree = m.degree;
     return *this;
 }
 
 bool Monom::operator==(const Monom& m) const {
-    return coeff == m.coeff &&
-        degree == m.degree;
+    return fabs(coeff - m.coeff) <= EPS && degree == m.degree;
 }
 
 bool Monom::operator!=(const Monom& m) const {
@@ -216,9 +172,7 @@ bool Monom::operator<=(const Monom& m) const {
     return degree <= m.degree;
 }
 
-
-
-double Monom::count(double x, double y, double z) {
+double Monom::operator()(double x, double y, double z) const {
     int tmp = degree;
     double answ = coeff;
     // x
@@ -233,7 +187,7 @@ double Monom::count(double x, double y, double z) {
 
     // z
     if (tmp % 10) {
-        answ *= pow(z, tmp %10);
+        answ *= pow(z, tmp % 10);
 
     }
     return answ;

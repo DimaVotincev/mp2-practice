@@ -101,54 +101,6 @@ TEST(Monom, multiply_Monoms_is_correct)
 }
 
 
-TEST(Monom, can_add_const_to_Monom_with_deg_0)
-{
-    Monom m1(0,0);
-    double c = 11.1;
-    ASSERT_NO_THROW(m1+c);
-}
-
-TEST(Monom, cant_add_const_to_Monom_with_deg_not_0)
-{
-    Monom m1(0, 5);
-    double c = 11.1;
-    ASSERT_ANY_THROW(m1 + c);
-}
-
-TEST(Monom, add_const_to_Monom_with_deg_0_is_correct)
-{
-    Monom m1(0, 0);
-    double c = 11.1;
-    Monom m2(m1 + c);
-    Monom m3(c, 0);
-    EXPECT_TRUE(m2 == m3);
-}
-
-
-
-TEST(Monom, can_subctract_const_to_Monom_with_deg_0)
-{
-    Monom m1(0, 0);
-    double c = 11.1;
-    ASSERT_NO_THROW(m1 - c);
-}
-
-TEST(Monom, cant_subctract_const_to_Monom_with_deg_not_0)
-{
-    Monom m1(0, 5);
-    double c = 11.1;
-    ASSERT_ANY_THROW(m1 - c);
-}
-
-TEST(Monom, subctract_const_to_Monom_with_deg_0_is_correct)
-{
-    Monom m1(0, 0);
-    double c = 11.1;
-    Monom m2(m1 - c);
-    Monom m3(-c, 0);
-    EXPECT_TRUE(m2 == m3);
-}
-
 
 TEST(Monom, can_multiply_Monom_by_const)
 {
@@ -210,24 +162,6 @@ TEST(Monom, Monom_tostr__is_correct5)
 }
 
 
-
-TEST(Monom, can_equalize_Monom_with_deg_0_to_const)
-{
-    Monom m1(10, 0);
-    ASSERT_NO_THROW(m1 == 10);
-}
-
-TEST(Monom, equalize_Monom_with_deg_0_to_const_is_correct1)
-{
-    Monom m1(10, 0);
-    EXPECT_TRUE(m1 == 10);
-}
-
-TEST(Monom, equalize_Monom_with_deg_0_to_const_is_correct2)
-{
-    Monom m1(10, 0);
-    EXPECT_FALSE(m1 == 5);
-}
 
 
 TEST(Monom, operator_G_is_correct)

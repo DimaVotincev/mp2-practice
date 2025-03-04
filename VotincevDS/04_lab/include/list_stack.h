@@ -46,7 +46,7 @@ size_t ListStack<T>::size() const {
 
 template <typename T>
 ListStack<T>::ListStack(const ListStack<T>& s) {
-    if (s.elems.get_head() == nullptr) {
+    if (s.elems.get_pFirst() == nullptr) {
         return;
     }
     elems = List<T>(s.elems);
@@ -92,7 +92,7 @@ T ListStack<T>::Top() const {
 
 
 template <typename T>
-bool ListStack<T>::IsEmpty() const { return elems.get_head() == nullptr; };
+bool ListStack<T>::IsEmpty() const { return elems.get_pFirst() == nullptr; };
 
 template <typename T>
 bool ListStack<T>::IsFull() const {
