@@ -84,13 +84,26 @@ string Monom::Monom_tostr() const {
             ss << std::defaultfloat << coeff;
             answ += ss.str();
         }
-
-    }
-    else if (coeff < 0) {
-        if (coeff != 1) {
+        else if (degree == 0) {
             std::stringstream ss;
             ss << std::defaultfloat << coeff;
             answ += ss.str();
+        }
+
+    }
+    else if (coeff < 0) {
+        if (coeff != -1) {
+            std::stringstream ss;
+            ss << std::defaultfloat << coeff;
+            answ += ss.str();
+        }
+        else if (degree == 0) {
+            std::stringstream ss;
+            ss << std::defaultfloat << coeff;
+            answ += ss.str();
+        }
+        else {
+            answ += "-";
         }
     }
     else {
@@ -149,7 +162,7 @@ const Monom& Monom::operator=(const Monom& m) {
 }
 
 bool Monom::operator==(const Monom& m) const {
-    return fabs(coeff - m.coeff) <= EPS && degree == m.degree;
+    return degree == m.degree && fabs(coeff - m.coeff) <= EPS;
 }
 
 bool Monom::operator!=(const Monom& m) const {

@@ -2,7 +2,6 @@
 
 #include "monom.h"
 #include "general.h"
-#include "algorithm"
 using namespace std;
 
 
@@ -22,9 +21,9 @@ public:
 
     double operator()(double x, double y, double z) const;
 
-    Polinom operator+(const Polinom& p);
-    Polinom operator-(const Polinom& p);    // делаются через соответств операции с мономом и функцией упорядоченной вставки
-    Polinom operator*(const Polinom& p);
+    Polinom operator+(const Polinom& p);    // делаются через соответств операции с мономом 
+    Polinom operator-(const Polinom& p);    //
+    Polinom operator*(const Polinom& p);    // и функцией упорядоченной вставки
 
     Polinom operator+(const Monom& p);
     Polinom operator-(const Monom& p); 
@@ -44,10 +43,15 @@ public:
 
 
 
-// ++
+
 void Polinom::set_str() {
     string answ;
     ListNode<Monom>* tmp = polinom.get_pFirst();
+    if (tmp == nullptr) {
+        this->name = "";
+        return;
+    }
+
     while (tmp != polinom.get_pHead()) {
         answ += tmp->val.Monom_tostr();
         tmp = tmp->next;
@@ -63,7 +67,7 @@ void Polinom::set_str() {
 
 
 
-// ++
+
 void Polinom::InsertOrder(const Monom& key) {
 
     if (polinom.get_pFirst() == nullptr) {
@@ -90,11 +94,13 @@ void Polinom::InsertOrder(const Monom& key) {
     polinom.pushBack(key);
 }
 
-// ++
+
+
+
 Polinom::Polinom() {
 
 }
-                                               // ++
+                                              
 Polinom::Polinom(const string& str) {
     name = str;
     vector<string> monoms = ArithmeticExpression::ArithmeticExpression(str).convert(str);
@@ -191,30 +197,13 @@ Polinom::Polinom(const Polinom& p) {
     this->polinom = p.polinom;
 }
 
-
-
-
-// полином доделать,тесты проверить
-// функцию make_op - переместить
-
-
-                                                            // ????????????????????????????
 const Polinom& Polinom::operator=(const Polinom& p) {
     polinom = p.polinom;
+    name = p.name;
     return *this;
-    /*if (this == &p)
-    {
-        return *this;
-    }
-
-    ListNode<Monom>* iter1 = this->polinom.get_pHead();
-    ListNode<Monom>* iter2 = p.polinom.get_pHead();
-
-
-    return *this;*/
 }
 
-// ++
+
 Polinom Polinom::operator+(const Monom& p) {
     if (p.coeff == 0) {
         return *this;
@@ -224,17 +213,17 @@ Polinom Polinom::operator+(const Monom& p) {
     return answ;
 }
 
-// ++
+
 Polinom Polinom::operator-(const Monom& p) {
     Monom tmp = p;
     tmp = tmp * (-1.0);
     return Polinom::operator+(tmp);
 }
 
-// ++
+
 Polinom Polinom::operator*(const Monom& p) {
     Polinom answ;
-    ListNode<Monom>* iter = polinom.get_pHead()->next;
+    ListNode<Monom>* iter = polinom.get_pFirst();
     while (iter != polinom.get_pHead()) {
         answ.polinom.pushBack(iter->val * p);
         iter = iter->next;
@@ -242,7 +231,7 @@ Polinom Polinom::operator*(const Monom& p) {
     return answ;
 }
 
-// ++
+
 Polinom Polinom::operator+(double c) // TODO: polinom + monom 
 {
     Polinom answ;
@@ -251,13 +240,13 @@ Polinom Polinom::operator+(double c) // TODO: polinom + monom
     return answ;
 }
 
-// ++
+
 Polinom Polinom::operator-(double c)
 {
     return Polinom::operator+(-c);
 }
 
-// ++
+
 Polinom Polinom::operator*(double c)
 {
     Polinom answ;
@@ -270,7 +259,7 @@ Polinom Polinom::operator*(double c)
 }
 
 
-// ++
+
 Polinom Polinom::operator+(const Polinom& p)
 {
     Polinom answ;
@@ -297,9 +286,12 @@ Polinom Polinom::operator+(const Polinom& p)
     return answ;
 }
 
-// ++
+
 Polinom Polinom::operator-(const Polinom& p)
 {
+    if (*this == p) {
+        return Polinom();
+    }
     Polinom tmp = p;
     tmp = tmp * (-1.0);
     tmp.set_str();
@@ -308,8 +300,8 @@ Polinom Polinom::operator-(const Polinom& p)
 
 
 
-// ++
-Polinom Polinom::operator*(const Polinom& p)
+
+Polinom Polinom::operator*(const Polinom& p)  // TODO: реализуем вставку в упорядоченный список (отдельный метод)
 {
     Polinom answ;
     ListNode<Monom>* iter1 = polinom.get_pFirst();
@@ -331,24 +323,8 @@ Polinom Polinom::operator*(const Polinom& p)
 
 
 
-
-
-// ??????????????
-bool Polinom::operator==(const Polinom& p) const {// TODO: сравнение мономов
+bool Polinom::operator==(const Polinom& p) const {  // TODO: сравнение мономов
     return this->polinom == p.polinom;
-    /*ListNode<Monom>* iter1 = polinom.get_pHead()->next;
-    ListNode<Monom>* iter2 = p.polinom.get_pHead()->next;
-    while (iter1 != polinom.get_pHead() && iter2 != p.polinom.get_pHead()) {
-        if (iter1->val != iter2->val) {
-            return 0;
-        }
-        iter1 = iter1->next;
-        iter2 = iter2->next;
-    }
-    if (iter1 != polinom.get_pHead() || iter2 != p.polinom.get_pHead()) {
-        return 0;
-    }
-    return 1;*/
 }
 
 bool Polinom::operator!=(const Polinom& p) const {
@@ -365,7 +341,7 @@ std::ostream& operator<<(std::ostream& out, Polinom& p) {
 
 std::istream& operator>>(std::istream& in, Polinom& p) {
     string strPolinom;
-    in >> strPolinom;
+    getline(in, strPolinom);
     p = Polinom(strPolinom);
     return in;
 }

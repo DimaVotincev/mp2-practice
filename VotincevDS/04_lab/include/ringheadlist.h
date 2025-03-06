@@ -21,7 +21,7 @@ public:
     void pushBack(ListNode<T>* node);
     void pushFront(T obj); // TODO: move to List
     void pushBack(T obj); // TODO: move to List
-    void remove(T key); // TODO: move to List
+    void remove(T key); 
     void RemoveFirst();
 
     bool operator==(const RingHeadList<T>& s) const;

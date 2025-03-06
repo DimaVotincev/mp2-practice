@@ -59,7 +59,7 @@ public:
 
 
 template <typename T>
-List<T>::List() {                // ++
+List<T>::List() {               
     pFirst = nullptr;
     pCurr = pFirst;
     pPrev = nullptr;
@@ -70,7 +70,7 @@ List<T>::List() {                // ++
 
 
 template <typename T>
-List<T>::List(const T& x) {               // ++
+List<T>::List(const T& x) {              
     pFirst = new ListNode<T>(x);
     pCurr = pFirst;
     pPrev = nullptr;
@@ -81,26 +81,19 @@ List<T>::List(const T& x) {               // ++
 
 
 template <typename T>
-List<T>::List(const List<T>& list) : List() {     // ++
-    // если пустой список
+List<T>::List(const List<T>& list) : List() {    
     if (list.pFirst == nullptr) {
         return;
     }
-
     pFirst = new ListNode<T>(list.pFirst->val);
     pCurr = pFirst;
     pStop = nullptr;
     pPrev = pStop;
-    // обхожу входной лист
     ListNode<T>* curr = list.pFirst->next;
-
-    // если входной лист имел 1 элемент
     if (curr == pStop) {
         pLast = pFirst;
         return;
     }
-
-    // если входной лист имеет более 1 элемента
     while (curr != list.pStop) {
         pCurr->next = new ListNode<T>(curr->val);
         pPrev = pCurr;
@@ -114,20 +107,13 @@ List<T>::List(const List<T>& list) : List() {     // ++
 }
 
 template <typename T>
-List<T>::List(const ListNode<T>* node) : List() {        // ++
-    // если поступил пустой node
+List<T>::List(const ListNode<T>* node) : List() {       
     if (node == nullptr) {
         return;
     }
-
-    // если не пустой node
     pFirst = new ListNode<T>(node->val);
     pCurr = pFirst;
-
-    // обхожу поэлементно, заполн€€ список
     ListNode<T>* curr = node->next;
-
-    // второе условие нужно дл€ ringlist
     while (curr != pStop && curr->next != node) {
         pCurr->next = new ListNode<T>(curr->val);
         pPrev = pCurr;
@@ -145,7 +131,7 @@ List<T>::List(const ListNode<T>* node) : List() {        // ++
 
 
 template <typename T>
-List<T>::~List() {       // ++
+List<T>::~List() {      
     if (pFirst == nullptr) {
         return;
     }
@@ -171,27 +157,20 @@ List<T>::~List() {       // ++
 
 
 template <typename T>
-const List<T>& List<T>::operator=(const List <T>& list) {            // ++
-    // присваивание самому себе
+const List<T>& List<T>::operator=(const List <T>& list) {           
     if (this == &list)
     {
         return *this;
     }
-
-    // присваивание пустому списку
     if (list.pFirst == nullptr)
     {
         pFirst = nullptr;
         return *this;
     }
 
-    // если не путой список, определ€ю
-    // pFirst значением корн€ 
     pFirst = new ListNode<T>(list.pFirst->val);
     pCurr = pFirst;
 
-    // обхожу все элементы входного списка
-    // и заполн€ю наш список его значени€ми
     ListNode<T>* curr = list.pFirst->next;
     while (curr != nullptr)
     {
@@ -207,23 +186,18 @@ const List<T>& List<T>::operator=(const List <T>& list) {            // ++
 
 
 template <typename T>
-void List<T>::reset_pCurr() {            // ++
-    // сбрасывает pCurr по умолчанию
-    // (соответственно и pPrev)
+void List<T>::reset_pCurr() {           
     pCurr = pFirst;
     pPrev = pStop;
 }
 
 
 template <typename T>
-T List<T>::get_val() const {                // ++
-    // возвращает значение корн€
+T List<T>::get_val() const {               
     return pFirst->val;
 }
 
 
-
-// используетс€ в лист стеке
 template <typename T>
 ListNode<T>* List<T>::get_pFirst() const {
     return pFirst;
@@ -231,10 +205,7 @@ ListNode<T>* List<T>::get_pFirst() const {
 
 
 template <typename T>
-ListNode<T>* List<T>::search(T key) {   //  ++
-    // обхожу исходный список поэлементно
-    // и сравниваю ключи с входным ключом
-
+ListNode<T>* List<T>::search(T key) {  
     pCurr = pFirst;
     pPrev = pStop;
 
@@ -246,7 +217,6 @@ ListNode<T>* List<T>::search(T key) {   //  ++
         pCurr = pCurr->next;
     }
 
-    // не нашелс€ ключ
     if (pCurr == pStop || pCurr == nullptr) {
         return pStop;
     }
@@ -256,24 +226,20 @@ ListNode<T>* List<T>::search(T key) {   //  ++
 
 
 template <typename T>
-void List<T>::push(const T& key) {    // ++
+void List<T>::push(const T& key) {   
     ListNode<T>* tmp = new ListNode<T>(key);
     pushFront(tmp);
 }
 
 
 template <typename T>
-void List<T>::pushFront(ListNode<T>* node) {   // ++
-
+void List<T>::pushFront(ListNode<T>* node) {  
     if (node == nullptr) {
         throw "cant push null node in front";
     }
-
     if (node->next != nullptr) {
         throw "InsertAfter can push only 1 node";
     }
-
-
     if (pFirst == nullptr) {
         pFirst = node;
         pCurr = pFirst;
@@ -291,15 +257,13 @@ void List<T>::pushFront(ListNode<T>* node) {   // ++
 
 
 template <typename T>
-void List<T>::pushBack(ListNode<T>* node) {  // ++
+void List<T>::pushBack(ListNode<T>* node) { 
     if (node == nullptr) {
         return;
     }
-
     if (node->next != nullptr) {
         throw "InsertAfter can push only 1 node";
     }
-
     if (pFirst == nullptr) {
         this->pushFront(node);
         return;
@@ -311,12 +275,11 @@ void List<T>::pushBack(ListNode<T>* node) {  // ++
 
 
 template <typename T>
-void List<T>::InsertAfter(ListNode<T>* node, T key) {             // ++
+void List<T>::InsertAfter(ListNode<T>* node, T key) {            
     search(key);
     if (node->next != nullptr) {
         throw "InsertAfter can push only 1 node";
     }
-
     if (pCurr == pStop) {
         throw "cant InsertAfter not existing elem";
     }
@@ -324,12 +287,13 @@ void List<T>::InsertAfter(ListNode<T>* node, T key) {             // ++
     if (pCurr->next == pStop) {
         pLast = node;
     }
+
     pCurr->next = node;
 };
 
 template <typename T>
-void List<T>::InsertBefore(ListNode<T>* node, T key) {       // ++
-    search(key); // !! TODO: search!!!!!!!!!!!!!
+void List<T>::InsertBefore(ListNode<T>* node, T key) {      
+    search(key);            // !! TODO: search!!!!!!!!!!!!!
     if (pCurr == pStop) {
         throw "this key does not exist";
     }
@@ -346,8 +310,8 @@ void List<T>::InsertBefore(ListNode<T>* node, T key) {       // ++
 
 
 template <typename T>
-void List<T>::remove(T key) {                 // ++
-    search(key);  // !! TODO: search!!!!!!!!!!!!!
+void List<T>::remove(T key) {                
+    search(key);        // !! TODO: search!!!!!!!!!!!!!
     if (pCurr == pStop) {
         throw "this key doesnt exist";
     }
@@ -355,7 +319,6 @@ void List<T>::remove(T key) {                 // ++
         RemoveFirst();
         return;
     }
-    // звено с ключом key последнее
     if (pCurr->next == pStop) {
         pLast = pPrev;
     }
@@ -379,7 +342,7 @@ void List<T>::pushBack(T obj) {
 }
 
 template <typename T>
-size_t List<T>::size() const {        // ++
+size_t List<T>::size() const {       
     ListNode<T>* curr = pFirst;
     size_t size = 0;
     while (curr != pStop) {
@@ -391,15 +354,12 @@ size_t List<T>::size() const {        // ++
 
 
 template <typename T>
-void List<T>::RemoveFirst() {           // ++
-
+void List<T>::RemoveFirst() {          
     if (pFirst == nullptr) {
         throw "removing element from empty list";
     }
 
     ListNode<T>* tmp = pFirst;
-
-    // лист из 1 элемента
     if (pFirst->next == pStop) {
         delete tmp;
         pFirst = nullptr;
@@ -415,14 +375,12 @@ void List<T>::RemoveFirst() {           // ++
     else {
         pFirst = pFirst->next;
     }
-
     delete tmp;
 }
 
 
 template <typename T>
-bool List<T>::operator==(const List<T>& s) const {      // ++
-
+bool List<T>::operator==(const List<T>& s) const {     
     ListNode<T>* curr1 = pFirst, * curr2 = s.pFirst;
     while (curr1 != pStop && curr2 != s.pStop) {
         if (curr1->val != curr2->val) {
@@ -439,6 +397,6 @@ bool List<T>::operator==(const List<T>& s) const {      // ++
 
 
 template <typename T>
-bool List<T>::operator!=(const List<T>& s) const {     // ++
+bool List<T>::operator!=(const List<T>& s) const {    
     return !(*this == s);
 }

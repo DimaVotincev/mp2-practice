@@ -79,7 +79,6 @@ void HeadList<T>::pushFront(ListNode<T>* node) {
     List<T>::pushFront(node);
     pPrev = pHead;
     pHead->next = node;
-    return;
 };
 
 template <typename T>
@@ -89,7 +88,6 @@ void HeadList<T>::pushBack(ListNode<T>* node) {
     {
         pPrev = pHead;
     }
-    return;
 };
 
 template <typename T>
