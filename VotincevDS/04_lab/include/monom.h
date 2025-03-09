@@ -8,7 +8,7 @@
 
 #define EPS 0.000001
 
-struct Monom { // TODO struct?
+struct Monom {  // TODO struct?
     double coeff;
     int degree;
 

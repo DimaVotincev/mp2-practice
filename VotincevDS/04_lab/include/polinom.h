@@ -234,10 +234,11 @@ Polinom Polinom::operator*(const Monom& p) {
 
 Polinom Polinom::operator+(double c) // TODO: polinom + monom 
 {
-    Polinom answ;
-    answ = *this;
-    answ.InsertOrder(Monom(c, 0));
-    return answ;
+    //Polinom answ;
+    //answ = *this;
+    //answ.InsertOrder(Monom(c, 0));
+    //return answ;
+    return *this + Monom(c,0);
 }
 
 
