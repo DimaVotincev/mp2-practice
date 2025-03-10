@@ -24,8 +24,6 @@ public:
     virtual void InsertBefore(ListNode<T>* node, T key);
     virtual void RemoveFirst();
 
-    ListNode<T>* get_pHead() const { return pHead; };
-
     bool operator==(const HeadList<T>& s) const;
     bool operator!=(const List<T>& s) const;
 
@@ -86,18 +84,19 @@ void HeadList<T>::pushBack(ListNode<T>* node) {
     List<T>::pushBack(node);
     if (pFirst == node)
     {
+        pHead->next = node;
         pPrev = pHead;
     }
 };
 
 template <typename T>
-void HeadList<T>::pushFront(T obj) {
+void HeadList<T>::pushFront(T obj) { // TODO: remove
     ListNode<T>* node = new ListNode<T>(obj);
     pushFront(node);
 }
 
 template <typename T>
-void HeadList<T>::pushBack(T obj) {
+void HeadList<T>::pushBack(T obj) { // TODO: remove
     ListNode<T>* node = new ListNode<T>(obj);
     pushBack(node);
 }
@@ -107,6 +106,7 @@ void HeadList<T>::InsertBefore(ListNode<T>* node, T key) {
     List<T>::InsertBefore(node, key);
     if (pFirst == node)
     {
+        pHead->pNext = pFirst;
         pPrev = pHead;
     }
 };
@@ -114,6 +114,7 @@ void HeadList<T>::InsertBefore(ListNode<T>* node, T key) {
 template <typename T>
 void HeadList<T>::RemoveFirst() {
     List<T>::RemoveFirst();
+    pHead->pNext = pFirst;
     pPrev = pHead;
 }
 

@@ -3,29 +3,13 @@
 
 using namespace std;
 
-
-
-
 Polinom make_op(Polinom p1, Polinom p2, char s);
-
-
-
 
 
 
 int main()
 {
     setlocale(LC_ALL, "Russian");
-
-
- 
-    // просмотреть весь код
-    // протестить прогу
-    // закоммитить
-
-
-
-
 
 
 

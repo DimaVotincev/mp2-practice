@@ -83,15 +83,15 @@ const RingHeadList<T>& RingHeadList<T>::operator=(const RingHeadList <T>& list) 
 template <typename T>
 void RingHeadList<T>::pushFront(T obj) {
     ListNode<T>* node = new ListNode<T>(obj);
-    HeadList<T>::pushFront(node);
+    HeadList<T>::pushFront(obj);
     pLast->next = pHead;
     pStop = pHead;
 };
 
 template <typename T>
 void RingHeadList<T>::pushBack(T obj) {
-    ListNode<T>* node = new ListNode<T>(obj);
-    RingHeadList<T>::pushBack(node);
+   /* ListNode<T>* node = new ListNode<T>(obj);*/
+    HeadList<T>::pushBack(obj);
     pLast->next = pHead;
     pStop = pHead;
 };
@@ -125,7 +125,7 @@ void RingHeadList<T>::pushBack(ListNode<T>* node) {
 
 template <typename T>
 void RingHeadList<T>::RemoveFirst() {
-    HeadList<T>::RemoveFirst();
+    HeadList<T>::RemoveFirst(); // TODO: pHead на себя, если пуст
 }
 
 

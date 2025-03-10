@@ -162,17 +162,18 @@ const List<T>& List<T>::operator=(const List <T>& list) {
     {
         return *this;
     }
+    // TODO: clear list
     if (list.pFirst == nullptr)
     {
-        pFirst = nullptr;
         return *this;
     }
+    this->pStop = nullptr;
 
     pFirst = new ListNode<T>(list.pFirst->val);
     pCurr = pFirst;
 
     ListNode<T>* curr = list.pFirst->next;
-    while (curr != nullptr)
+    while (curr != pStop)
     {
         pCurr->next = new ListNode<T>(curr->val);
         pCurr = pCurr->next;
@@ -206,21 +207,21 @@ ListNode<T>* List<T>::get_pFirst() const {
 
 template <typename T>
 ListNode<T>* List<T>::search(T key) {  
+    if (pFirst == nullptr)
+    {
+        return nullptr;
+    }
     pCurr = pFirst;
     pPrev = pStop;
 
-    while (pCurr != pStop && pCurr != nullptr) {
-        if (pCurr->val == key) {
-            return pCurr;
-        }
+    while (pCurr != pStop && pCurr->val != key) {
         pPrev = pCurr;
         pCurr = pCurr->next;
     }
 
-    if (pCurr == pStop || pCurr == nullptr) {
-        return pStop;
+    if (pCurr == pStop) {
+        return nullptr;
     }
-
     return pCurr;
 };
 
@@ -236,9 +237,6 @@ template <typename T>
 void List<T>::pushFront(ListNode<T>* node) {  
     if (node == nullptr) {
         throw "cant push null node in front";
-    }
-    if (node->next != nullptr) {
-        throw "InsertAfter can push only 1 node";
     }
     if (pFirst == nullptr) {
         pFirst = node;
@@ -259,10 +257,7 @@ void List<T>::pushFront(ListNode<T>* node) {
 template <typename T>
 void List<T>::pushBack(ListNode<T>* node) { 
     if (node == nullptr) {
-        return;
-    }
-    if (node->next != nullptr) {
-        throw "InsertAfter can push only 1 node";
+        return; // TODO: throw
     }
     if (pFirst == nullptr) {
         this->pushFront(node);
@@ -277,9 +272,6 @@ void List<T>::pushBack(ListNode<T>* node) {
 template <typename T>
 void List<T>::InsertAfter(ListNode<T>* node, T key) {            
     search(key);
-    if (node->next != nullptr) {
-        throw "InsertAfter can push only 1 node";
-    }
     if (pCurr == pStop) {
         throw "cant InsertAfter not existing elem";
     }
@@ -287,18 +279,14 @@ void List<T>::InsertAfter(ListNode<T>* node, T key) {
     if (pCurr->next == pStop) {
         pLast = node;
     }
-
     pCurr->next = node;
 };
 
 template <typename T>
 void List<T>::InsertBefore(ListNode<T>* node, T key) {      
-    search(key);            // !! TODO: search!!!!!!!!!!!!!
+    search(key);
     if (pCurr == pStop) {
         throw "this key does not exist";
-    }
-    if (node->next != nullptr) {
-        throw "InsertBefore can push only 1 node";
     }
     if (pCurr == pFirst) {
         pushFront(node);
@@ -311,11 +299,11 @@ void List<T>::InsertBefore(ListNode<T>* node, T key) {
 
 template <typename T>
 void List<T>::remove(T key) {                
-    search(key);        // !! TODO: search!!!!!!!!!!!!!
+    search(key);
     if (pCurr == pStop) {
         throw "this key doesnt exist";
     }
-    if (pPrev == pStop) { // !! TODO: RemoveFirst!!!!!!!!!!!!!
+    if (pPrev == pStop) {
         RemoveFirst();
         return;
     }
@@ -361,21 +349,16 @@ void List<T>::RemoveFirst() {
 
     ListNode<T>* tmp = pFirst;
     if (pFirst->next == pStop) {
-        delete tmp;
+        delete pFirst;
         pFirst = nullptr;
         pCurr = nullptr;
         pLast = nullptr;
         return;
     }
 
-    if (pCurr == pFirst) {
-        pFirst = pFirst->next;
-        pCurr = pFirst;
-    }
-    else {
-        pFirst = pFirst->next;
-    }
+    pFirst = pFirst->next;
     delete tmp;
+    reset_pCurr();
 }
 
 
