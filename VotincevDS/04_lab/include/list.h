@@ -31,7 +31,13 @@ public:
 
     const List<T>& operator=(const List <T>& list);
 
+
+
+    T getCurr() const;
     void reset_pCurr();
+    bool IsEnded() const;
+    void Next();
+
     T get_val() const;
     ListNode<T>* get_pFirst() const;
     ListNode<T>* search(T key);
@@ -39,8 +45,8 @@ public:
     void push(const T& key);
     virtual void pushFront(ListNode<T>* node);
     virtual void pushBack(ListNode<T>* node);
-    virtual void pushFront(T obj); // TODO: move to List
-    virtual void pushBack(T obj); // TODO: move to List
+    void pushFront(T obj); 
+    void pushBack(T obj); 
 
     virtual void InsertAfter(ListNode<T>* node, T key);
     virtual void InsertBefore(ListNode<T>* node, T key);
@@ -53,12 +59,13 @@ public:
     bool operator!=(const List<T>& s) const;
 
 
+
+
+
 };
 
 
-
-
-template <typename T>
+template <typename T>      // ++
 List<T>::List() {               
     pFirst = nullptr;
     pCurr = pFirst;
@@ -70,7 +77,7 @@ List<T>::List() {
 
 
 template <typename T>
-List<T>::List(const T& x) {              
+List<T>::List(const T& x) {                 // ++    
     pFirst = new ListNode<T>(x);
     pCurr = pFirst;
     pPrev = nullptr;
@@ -81,7 +88,7 @@ List<T>::List(const T& x) {
 
 
 template <typename T>
-List<T>::List(const List<T>& list) : List() {    
+List<T>::List(const List<T>& list) : List() {         // ++
     if (list.pFirst == nullptr) {
         return;
     }
@@ -107,7 +114,7 @@ List<T>::List(const List<T>& list) : List() {
 }
 
 template <typename T>
-List<T>::List(const ListNode<T>* node) : List() {       
+List<T>::List(const ListNode<T>* node) : List() {       // ++       
     if (node == nullptr) {
         return;
     }
@@ -131,7 +138,7 @@ List<T>::List(const ListNode<T>* node) : List() {
 
 
 template <typename T>
-List<T>::~List() {      
+List<T>::~List() {        // ++      
     if (pFirst == nullptr) {
         return;
     }
@@ -157,17 +164,30 @@ List<T>::~List() {
 
 
 template <typename T>
-const List<T>& List<T>::operator=(const List <T>& list) {           
+const List<T>& List<T>::operator=(const List <T>& list) {      // ++      
     if (this == &list)
     {
         return *this;
     }
-    // TODO: clear list
+
+
+    // TODO: clear list    ++
+    if (pFirst) {
+        pCurr = pFirst;
+        while (pCurr != pStop) {
+            pPrev = pCurr;
+            pCurr = pCurr->next;
+            delete pPrev;
+        }
+    }
+    pStop = nullptr;
+
+
     if (list.pFirst == nullptr)
     {
         return *this;
     }
-    this->pStop = nullptr;
+    pStop = nullptr;
 
     pFirst = new ListNode<T>(list.pFirst->val);
     pCurr = pFirst;
@@ -186,27 +206,52 @@ const List<T>& List<T>::operator=(const List <T>& list) {
 }
 
 
+
 template <typename T>
-void List<T>::reset_pCurr() {           
+T List<T>::getCurr() const {
+    if (IsEnded()) {
+        throw "there is no element";
+    }
+    return pCurr->val;
+}
+
+
+template <typename T>
+void List<T>::reset_pCurr() {                // ++
     pCurr = pFirst;
     pPrev = pStop;
 }
 
 
 template <typename T>
-T List<T>::get_val() const {               
+bool List<T>::IsEnded() const {
+    return pCurr == pStop || pCurr == nullptr;
+    // сравнение на nullptr необходимо
+    // тк у пустого RingList есть только pHead
+    // и нет pFirst => нет pCurr , они nullptr
+}
+
+
+template <typename T>
+void List<T>::Next() {
+    pCurr = pCurr->next;
+}
+
+
+template <typename T>
+T List<T>::get_val() const {           // ++         
     return pFirst->val;
 }
 
 
 template <typename T>
-ListNode<T>* List<T>::get_pFirst() const {
+ListNode<T>* List<T>::get_pFirst() const {     // ++
     return pFirst;
 }
 
 
 template <typename T>
-ListNode<T>* List<T>::search(T key) {  
+ListNode<T>* List<T>::search(T key) {       // ++
     if (pFirst == nullptr)
     {
         return nullptr;
@@ -227,14 +272,14 @@ ListNode<T>* List<T>::search(T key) {
 
 
 template <typename T>
-void List<T>::push(const T& key) {   
+void List<T>::push(const T& key) {         // ++
     ListNode<T>* tmp = new ListNode<T>(key);
     pushFront(tmp);
 }
 
 
 template <typename T>
-void List<T>::pushFront(ListNode<T>* node) {  
+void List<T>::pushFront(ListNode<T>* node) {       // ++
     if (node == nullptr) {
         throw "cant push null node in front";
     }
@@ -255,9 +300,9 @@ void List<T>::pushFront(ListNode<T>* node) {
 
 
 template <typename T>
-void List<T>::pushBack(ListNode<T>* node) { 
+void List<T>::pushBack(ListNode<T>* node) {      // ++
     if (node == nullptr) {
-        return; // TODO: throw
+        throw "cant pushBack empty node";  // TODO: throw ++
     }
     if (pFirst == nullptr) {
         this->pushFront(node);
@@ -267,6 +312,22 @@ void List<T>::pushBack(ListNode<T>* node) {
     pLast->next = node;
     pLast = pLast->next;
 };
+
+
+
+
+template <typename T>
+void List<T>::pushFront(T obj) {
+    ListNode<T>* add = new ListNode<T>(obj);
+    pushFront(add);
+
+}
+template <typename T>
+void List<T>::pushBack(T obj) {
+    ListNode<T>* add = new ListNode<T>(obj);
+    pushBack(add);
+}
+
 
 
 template <typename T>
@@ -317,17 +378,6 @@ void List<T>::remove(T key) {
 
 
 
-template <typename T>
-void List<T>::pushFront(T obj) {
-    ListNode<T>* add = new ListNode<T>(obj);
-    pushFront(add);
-
-}
-template <typename T>
-void List<T>::pushBack(T obj) {
-    ListNode<T>* add = new ListNode<T>(obj);
-    pushBack(add);
-}
 
 template <typename T>
 size_t List<T>::size() const {       
@@ -383,3 +433,4 @@ template <typename T>
 bool List<T>::operator!=(const List<T>& s) const {    
     return !(*this == s);
 }
+

@@ -12,8 +12,6 @@ int main()
     setlocale(LC_ALL, "Russian");
 
 
-
-
     Polinom p1, p2;
     while(1) {
         cout << "¬ведите полином\n";

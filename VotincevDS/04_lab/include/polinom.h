@@ -19,11 +19,11 @@ public:
 
     const Polinom& operator=(const Polinom& p);
 
-    double operator()(double x, double y, double z) const;
+    double operator()(double x, double y, double z) ;
 
-    Polinom operator+(const Polinom& p);    // делаются через соответств операции с мономом 
-    Polinom operator-(const Polinom& p);    //
-    Polinom operator*(const Polinom& p);    // и функцией упорядоченной вставки
+    Polinom operator+(Polinom& p);    // делаются через соответств операции с мономом 
+    Polinom operator-(Polinom& p);    //
+    Polinom operator*(Polinom& p);    // и функцией упорядоченной вставки
 
     Polinom operator+(const Monom& p);
     Polinom operator-(const Monom& p); 
@@ -43,25 +43,21 @@ public:
 
 
 
-
 void Polinom::set_str() {
-    string answ;
-    ListNode<Monom>* tmp = polinom.get_pFirst();
-    if (tmp == nullptr) {
-        this->name = "";
-        return;
+
+    polinom.reset_pCurr();
+    string answ = "";
+    while (!polinom.IsEnded()) {
+        answ += polinom.getCurr().Monom_tostr();
+        polinom.Next();
     }
 
-    while (tmp != polinom.get_pHead()) {
-        answ += tmp->val.Monom_tostr();
-        tmp = tmp->next;
-    }
     if (!answ.empty()) {
         if (answ[0] == '+') {
             answ.erase(0, 1);
         }
 
-    }
+    }  
     this->name = answ;
 }
 
@@ -70,27 +66,32 @@ void Polinom::set_str() {
 
 void Polinom::InsertOrder(const Monom& key) {
 
-    if (polinom.get_pFirst() == nullptr) {
+    polinom.reset_pCurr();
+
+    if (polinom.IsEnded()) {
         polinom.pushBack(key);
         return;
     }
 
-    ListNode<Monom>* mn = polinom.get_pFirst();
-    while (mn->val.degree != -1) {
-        if (mn->val > key) {
+
+    while (!polinom.IsEnded()) {
+        if (polinom.getCurr() > key) {
             ListNode<Monom>* add = new ListNode<Monom>(key);
-            polinom.InsertBefore(add,mn->val);
-            return;
-        } else if (mn->val.degree == key.degree) {
-            mn->val = mn->val + key;
-            if (mn->val.coeff == 0) {
-                polinom.remove(mn->val);
-            }
+            polinom.InsertBefore(add, polinom.getCurr());
             return;
         }
-        mn = mn->next;
+        else if (polinom.getCurr().degree == key.degree) {
+            Monom tmp = polinom.getCurr();
+            tmp = tmp + key;   
+            polinom.remove(polinom.getCurr());
+            if (tmp.coeff == 0) {
+                return;
+            }
+            InsertOrder(tmp);
+            return;
+        }
+        polinom.Next();
     }
-    
     polinom.pushBack(key);
 }
 
@@ -222,22 +223,18 @@ Polinom Polinom::operator-(const Monom& p) {
 
 
 Polinom Polinom::operator*(const Monom& p) {
+    polinom.reset_pCurr();
     Polinom answ;
-    ListNode<Monom>* iter = polinom.get_pFirst();
-    while (iter != polinom.get_pHead()) {
-        answ.polinom.pushBack(iter->val * p);
-        iter = iter->next;
+    while (!polinom.IsEnded()) {
+        answ.polinom.pushBack(polinom.getCurr()*p);
+        polinom.Next();
     }
     return answ;
 }
 
 
-Polinom Polinom::operator+(double c) // TODO: polinom + monom 
+Polinom Polinom::operator+(double c) // TODO: polinom + monom ++
 {
-    //Polinom answ;
-    //answ = *this;
-    //answ.InsertOrder(Monom(c, 0));
-    //return answ;
     return *this + Monom(c,0);
 }
 
@@ -250,45 +247,53 @@ Polinom Polinom::operator-(double c)
 
 Polinom Polinom::operator*(double c)
 {
+    polinom.reset_pCurr();
     Polinom answ;
-    ListNode<Monom>* iter = polinom.get_pFirst();
-    while (iter != polinom.get_pHead()) {
-        answ.polinom.pushBack(iter->val * c);
-        iter = iter->next;
+    while (!polinom.IsEnded()) {
+        answ.polinom.pushBack(polinom.getCurr() * c);
+        polinom.Next();
     }
     return answ;
 }
 
 
 
-Polinom Polinom::operator+(const Polinom& p)
+Polinom Polinom::operator+(Polinom& p)
 {
+    if (this == &p) {
+        polinom.reset_pCurr();
+        Polinom answ(*this);
+        answ = answ + p;
+        return answ;
+    }
+
+    polinom.reset_pCurr();
+    p.polinom.reset_pCurr();
     Polinom answ;
-    ListNode<Monom>* iter1 = polinom.get_pFirst();
-    ListNode<Monom>* iter2 = p.polinom.get_pFirst();
-    while (iter1 != polinom.get_pHead() && iter2 != p.polinom.get_pHead()) {
-        answ.InsertOrder(iter1->val);
-        answ.InsertOrder(iter2->val);
-        iter1 = iter1->next;
-        iter2 = iter2->next;
+    while (!polinom.IsEnded() && !p.polinom.IsEnded()) {
+        answ.InsertOrder(polinom.getCurr());
+        answ.InsertOrder(p.polinom.getCurr());
+        polinom.Next();
+        p.polinom.Next();
     }
-    while (iter1 != polinom.get_pHead())
+    while (!polinom.IsEnded())
     {
-        answ.InsertOrder(iter1->val);
-        iter1 = iter1->next;
+        answ.InsertOrder(polinom.getCurr());
+        polinom.Next();
     }
-    while (iter2 != p.polinom.get_pHead())
+    while (!p.polinom.IsEnded())
     {
-        answ.InsertOrder(iter2->val);
-        iter2 = iter2->next;
+        answ.InsertOrder(p.polinom.getCurr());
+        p.polinom.Next();
     }
 
     answ.set_str();
     return answ;
+
 }
 
 
-Polinom Polinom::operator-(const Polinom& p)
+Polinom Polinom::operator-(Polinom& p)
 {
     if (*this == p) {
         return Polinom();
@@ -302,18 +307,37 @@ Polinom Polinom::operator-(const Polinom& p)
 
 
 
-Polinom Polinom::operator*(const Polinom& p)  // TODO: реализуем вставку в упорядоченный список (отдельный метод)
+Polinom Polinom::operator*(Polinom& p)  // TODO: реализуем вставку в упорядоченный список (отдельный метод) ++
 {
+    // сам на себя
+    if (this == &p) {
+        polinom.reset_pCurr();
+        Polinom answ;
+        Polinom tmp(*this);
+        while (!polinom.IsEnded()) {
+            while (!tmp.polinom.IsEnded()) {
+                answ.InsertOrder(polinom.getCurr() * tmp.polinom.getCurr());
+                tmp.polinom.Next();
+            }
+            polinom.Next();
+            tmp.polinom.Next();
+        }
+        answ.set_str();
+        return answ;
+    }
+
+
+    polinom.reset_pCurr();
+    p.polinom.reset_pCurr();
+
     Polinom answ;
-    ListNode<Monom>* iter1 = polinom.get_pFirst();
-    ListNode<Monom>* iter2 = p.polinom.get_pFirst();
-    while (iter1 != polinom.get_pHead()) {
-        while (iter2 != p.polinom.get_pHead()) {
-            answ.InsertOrder(iter1->val * iter2->val);
-            iter2 = iter2->next;
-        }    
-        iter1 = iter1->next;
-        iter2 = iter2->next;
+    while (!polinom.IsEnded()) {
+        while (!p.polinom.IsEnded()) {
+            answ.InsertOrder(polinom.getCurr() * p.polinom.getCurr());
+            p.polinom.Next();
+        }
+        polinom.Next();
+        p.polinom.Next();
     }
     answ.set_str();
 
@@ -324,7 +348,7 @@ Polinom Polinom::operator*(const Polinom& p)  // TODO: реализуем вставку в упоря
 
 
 
-bool Polinom::operator==(const Polinom& p) const {  // TODO: сравнение мономов
+bool Polinom::operator==(const Polinom& p) const {  // TODO: сравнение мономов ++
     return this->polinom == p.polinom;
 }
 
@@ -349,14 +373,15 @@ std::istream& operator>>(std::istream& in, Polinom& p) {
 
 
 
-double Polinom::operator()(double x, double y, double z) const {
+double Polinom::operator()(double x, double y, double z)  
+{
+    polinom.reset_pCurr();
     double answ = 0;
-    ListNode<Monom>* iter = polinom.get_pFirst();
-    while (iter != polinom.get_pHead()) {
-        answ += iter->val(x, y, z);
-        iter = iter->next;
+    while (!polinom.IsEnded()) {
+        answ += polinom.getCurr()(x, y, z);
+        polinom.Next();
     }
-    return answ;
+    return answ; 
 }
 
 

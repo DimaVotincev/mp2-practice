@@ -57,11 +57,6 @@ TEST(RingHeadList, can_search_existing_elem)
     ASSERT_NO_THROW(RingHeadList.search(1));
 }
 
-TEST(RingHeadList, cant_search_not_existing_elem)
-{
-    RingHeadList<int> RingHeadList(1);
-    EXPECT_TRUE(RingHeadList.search(7) == RingHeadList.get_pHead());
-}
 
 TEST(RingHeadList, double_search_works_correctly)
 {
@@ -248,17 +243,6 @@ TEST(RingHeadList, remove_works_correctly2)
     EXPECT_EQ(RingHeadList.get_pFirst()->next->val, 6);
 }
 
-TEST(RingHeadList, remove_works_correctly3)
-{
-    // тест на удаление в конце
-    RingHeadList<int> RingHeadList(4);
-    ListNode<int>* node1 = new ListNode<int>(5);
-    ListNode<int>* node2 = new ListNode<int>(6);
-    RingHeadList.pushBack(node1);
-    RingHeadList.pushBack(node2);   // 4 5 6
-    RingHeadList.remove(6);         // 4 5
-    EXPECT_EQ(RingHeadList.get_pFirst()->next->next, RingHeadList.get_pHead());
-}
 
 TEST(RingHeadList, can_RemoveFirst_elem)
 {

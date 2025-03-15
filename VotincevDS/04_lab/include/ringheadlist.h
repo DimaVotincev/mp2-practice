@@ -19,8 +19,8 @@ public:
     
     void pushFront(ListNode<T>* node);
     void pushBack(ListNode<T>* node);
-    void pushFront(T obj); // TODO: move to List
-    void pushBack(T obj); // TODO: move to List
+    void pushFront(T obj); 
+    void pushBack(T obj); 
     void remove(T key); 
     void RemoveFirst();
 
@@ -67,7 +67,9 @@ RingHeadList<T>::~RingHeadList() {
 template <typename T>
 const RingHeadList<T>& RingHeadList<T>::operator=(const List<T>& list) {
     HeadList<T>::operator=(list);
-    pLast->next = pHead;
+    if (pLast) {
+        pLast->next = pHead;
+    }
     pStop = pHead;
     return *this;
 }
@@ -75,33 +77,13 @@ const RingHeadList<T>& RingHeadList<T>::operator=(const List<T>& list) {
 template <typename T>
 const RingHeadList<T>& RingHeadList<T>::operator=(const RingHeadList <T>& list) {
     HeadList<T>::operator=(HeadList(list.pFirst));
-    pLast->next = pHead;
+    if (pLast) { // присваивание пустому
+        pLast->next = pHead;
+    }
     pStop = pHead;
     return *this;
 }
 
-template <typename T>
-void RingHeadList<T>::pushFront(T obj) {
-    ListNode<T>* node = new ListNode<T>(obj);
-    HeadList<T>::pushFront(obj);
-    pLast->next = pHead;
-    pStop = pHead;
-};
-
-template <typename T>
-void RingHeadList<T>::pushBack(T obj) {
-   /* ListNode<T>* node = new ListNode<T>(obj);*/
-    HeadList<T>::pushBack(obj);
-    pLast->next = pHead;
-    pStop = pHead;
-};
-
-template <typename T>
-void RingHeadList<T>::remove(T key) {
-    HeadList<T>::remove(key);
-    pHead->next = pFirst;
-    pStop = pHead;
-};
 
 
 
@@ -118,14 +100,46 @@ template <typename T>
 void RingHeadList<T>::pushBack(ListNode<T>* node) {
     HeadList<T>::pushBack(node);
     pLast->next = pHead;
+    pStop = pHead;
 };
+
+
+template <typename T>
+void RingHeadList<T>::pushFront(T obj) {
+    List<T>::pushFront(obj);
+    pLast->next = pHead;
+    pStop = pHead;
+};
+
+template <typename T>
+void RingHeadList<T>::pushBack(T obj) {
+    List<T>::pushBack(obj);
+    pLast->next = pHead;
+    pStop = pHead;
+};
+
+
+
+
+
+template <typename T>
+void RingHeadList<T>::remove(T key) {
+    HeadList<T>::remove(key);
+    pHead->next = pFirst;
+    pStop = pHead;
+};
+
 
 
 
 
 template <typename T>
 void RingHeadList<T>::RemoveFirst() {
-    HeadList<T>::RemoveFirst(); // TODO: pHead на себя, если пуст
+    HeadList<T>::RemoveFirst(); // TODO: pHead на себя, если пуст   ++
+    if (!pFirst) {
+        pHead->next = pHead;
+        pStop = pHead;
+    }
 }
 
 

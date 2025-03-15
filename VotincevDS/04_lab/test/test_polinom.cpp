@@ -168,13 +168,21 @@ TEST(Polinom, can_add_coeff_to_Polinoms)
     ASSERT_NO_THROW(p + 3615.2461);
 }
 
-TEST(Polinom, add_coeff_to_Polinoms_is_correct)
+
+
+TEST(Polinom, add_coeff_to_Polinoms_is_correct1)
+{
+    Polinom p("x+y");
+    Polinom res("3615.2461+x+y");
+    EXPECT_TRUE(res == (p + 3615.2461));
+}
+
+TEST(Polinom, add_coeff_to_Polinoms_is_correct2)
 {
     Polinom p("x+y");
     Polinom res("-214421.1246+x+y");
     EXPECT_TRUE(res == (p + (-214421.1246)));
 }
-
 TEST(Polinom, can_substract_coeff_from_Polinoms)
 {
     Polinom p("x+y");
@@ -249,6 +257,12 @@ TEST(Polinom, add_Polinoms_is_correct4)
     EXPECT_TRUE(p3 == (p1 + p2));
 }
 
+TEST(Polinom, add_Polinoms_is_correct5)
+{
+    Polinom p1("x+y");
+    Polinom p3("2x+2y");
+    EXPECT_TRUE(p3 == (p1 + p1));
+}
 
 
 TEST(Polinom, can_substract_Polinoms)
@@ -278,6 +292,7 @@ TEST(Polinom, substract_Polinoms_is_correct2)
     Polinom p3("x-y-z");
     EXPECT_TRUE(p3 == (p1 - p2));
 }
+
 TEST(Polinom, substract_Polinoms_is_correct3)
 {
 
@@ -286,6 +301,7 @@ TEST(Polinom, substract_Polinoms_is_correct3)
     Polinom p3("-x+yz");
     EXPECT_TRUE(p3 == (p1 - p2));
 }
+
 TEST(Polinom, substract_Polinoms_is_correct4)
 {
 
@@ -295,12 +311,19 @@ TEST(Polinom, substract_Polinoms_is_correct4)
     EXPECT_TRUE(p3 == (p1 - p2));
 }
 
+TEST(Polinom, substract_Polinoms_is_correct5)
+{
+    Polinom p1("x+y");
+    Polinom p3("");
+    EXPECT_TRUE(p3 == (p1 - p1));
+}
+
+
 TEST(Polinom, can_multiply_Polinoms)
 {
     Polinom p1("x+y+z");
     ASSERT_NO_THROW(p1 * p1);
 }
-
 
 TEST(Polinom, multiply_Polinoms_is_correct1)
 {
@@ -392,7 +415,7 @@ TEST(Polinom, count_is_correct3)
 {
     Polinom p1("x+y");
     double answ = (p1*p1)(2, 3, 4);
-    double real = 4+12+9;
+    double real = 25;
     EXPECT_TRUE(answ == real);
 }
 
