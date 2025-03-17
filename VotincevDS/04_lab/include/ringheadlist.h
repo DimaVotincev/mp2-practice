@@ -18,7 +18,7 @@ public:
 
     
     void pushFront(ListNode<T>* node);
-    void pushBack(ListNode<T>* node);
+    using HeadList::pushBack;
     void pushFront(T obj); 
     void pushBack(T obj); 
     void remove(T key); 
@@ -96,12 +96,12 @@ void RingHeadList<T>::pushFront(ListNode<T>* node) {
 
 
 
-template <typename T>
-void RingHeadList<T>::pushBack(ListNode<T>* node) {
-    HeadList<T>::pushBack(node);
-    pLast->next = pHead;
-    pStop = pHead;
-};
+//template <typename T>
+//void RingHeadList<T>::pushBack(ListNode<T>* node) {
+//    HeadList<T>::pushBack(node);
+//    pLast->next = pHead;
+//    pStop = pHead;
+//};
 
 
 template <typename T>

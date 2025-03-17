@@ -1,6 +1,7 @@
-#pragma once
-using namespace std;
+#include <iostream>
+#include "general_functions.h"
 
+using namespace std;
 
 bool is_digit(const char s) {
     return '0' <= s && s <= '9';
@@ -21,7 +22,7 @@ bool is_correct_seq(const char c1, const char c2) {
         is_xyz(c1) && is_xyz(c2) ||
         is_xyz(c1) && c2 == '^' ||
         c1 == '^' && is_digit(c2) ||
-        is_digit(c1) && is_xyz(c2)) 
+        is_digit(c1) && is_xyz(c2))
     {
         return 1;
     }
@@ -29,17 +30,17 @@ bool is_correct_seq(const char c1, const char c2) {
 
 
     /* возможные и невозможные комбинации:
-    
+
         ЦЦ   +
         ПП   +
         П ^  +
         ^ Ц  +
         ЦП   +
         Ц^   -
-        ПЦ   -      
+        ПЦ   -
         ^П   -
         ^^   -
-    */ 
+    */
 }
 
 

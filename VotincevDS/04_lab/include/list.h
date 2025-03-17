@@ -311,6 +311,16 @@ void List<T>::pushBack(ListNode<T>* node) {      // ++
 
     pLast->next = node;
     pLast = pLast->next;
+    pLast->next = pStop;
+    // в ринглисте так:
+    // то есть нужно в конце вызвать pushBack?
+    /*template <typename T>
+    void RingHeadList<T>::pushBack(ListNode<T>*node) {
+        HeadList<T>::pushBack(node);
+        pLast->next = pHead;
+        pStop = pHead;
+    };*/
+
 };
 
 

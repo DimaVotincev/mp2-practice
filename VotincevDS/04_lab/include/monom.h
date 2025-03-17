@@ -1,12 +1,12 @@
 #pragma once
 
-#include "postfix_form.h"
-#include "ringheadlist.h"
 #include <sstream>
 #include <iomanip>
 
-
 #define EPS 0.000001
+
+using namespace std;
+
 
 struct Monom {  // TODO struct?
     double coeff;
@@ -24,7 +24,7 @@ struct Monom {  // TODO struct?
 
     const Monom& operator=(const Monom& m);
 
-    string Monom_tostr() const;
+    std::string Monom_tostr() const;
     
     double operator()(double x, double y, double z) const;
 

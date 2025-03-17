@@ -1,4 +1,5 @@
 #include <iostream>
+#include "general_functions.h"
 #include "polinom.h"
 
 using namespace std;
