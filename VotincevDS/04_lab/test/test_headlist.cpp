@@ -65,6 +65,7 @@ TEST(HeadList, cant_search_not_existing_elem)
 
 TEST(HeadList, double_search_works_correctly)
 {
+    // по сути проверка навигации
     HeadList<int> HeadList(1);
     ListNode<int>* node = new ListNode<int>(2);
     HeadList.search(2);

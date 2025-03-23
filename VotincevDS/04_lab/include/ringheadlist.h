@@ -18,9 +18,8 @@ public:
 
     
     void pushFront(ListNode<T>* node);
-    using HeadList::pushBack;
     void pushFront(T obj); 
-    void pushBack(T obj); 
+    using HeadList::pushBack;
     void remove(T key); 
     void RemoveFirst();
 
@@ -31,7 +30,7 @@ public:
 
 template <typename T>
 RingHeadList<T>::RingHeadList() : HeadList() {
-    
+
 }
 
 template <typename T>
@@ -95,15 +94,6 @@ void RingHeadList<T>::pushFront(ListNode<T>* node) {
 };
 
 
-
-//template <typename T>
-//void RingHeadList<T>::pushBack(ListNode<T>* node) {
-//    HeadList<T>::pushBack(node);
-//    pLast->next = pHead;
-//    pStop = pHead;
-//};
-
-
 template <typename T>
 void RingHeadList<T>::pushFront(T obj) {
     List<T>::pushFront(obj);
@@ -111,13 +101,12 @@ void RingHeadList<T>::pushFront(T obj) {
     pStop = pHead;
 };
 
-template <typename T>
-void RingHeadList<T>::pushBack(T obj) {
-    List<T>::pushBack(obj);
-    pLast->next = pHead;
-    pStop = pHead;
-};
-
+//template <typename T>
+//void RingHeadList<T>::pushBack(T obj) {
+//    List<T>::pushBack(obj);
+//    pLast->next = pHead;
+//    pStop = pHead;
+//};
 
 
 
@@ -125,6 +114,11 @@ void RingHeadList<T>::pushBack(T obj) {
 template <typename T>
 void RingHeadList<T>::remove(T key) {
     HeadList<T>::remove(key);
+    if (pFirst == nullptr) {     // добавил этот IF и в конструторе по умолчанию одну штуку
+        pHead->next = pHead;
+        pStop = pHead;
+        return;
+    }
     pHead->next = pFirst;
     pStop = pHead;
 };

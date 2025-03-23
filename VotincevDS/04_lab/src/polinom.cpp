@@ -57,13 +57,18 @@ void Polinom::InsertOrder(const Monom& key) {
 
 
 Polinom::Polinom() {
-
+    polinom = RingHeadList<Monom>();
 }
 
 Polinom::Polinom(const string& str) {
     name = str;
     vector<string> monoms = ArithmeticExpression::ArithmeticExpression(str).convert(str);
     int sgn = 1, signs_counter = 0;
+
+    if (monoms.size() == 0) {
+        Polinom();
+        return;
+    }
 
     for (int i = 0; i < monoms.size(); i++) {
 

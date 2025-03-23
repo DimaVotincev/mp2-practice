@@ -18,13 +18,8 @@ public:
 
     virtual void pushFront(ListNode<T>* node);
     virtual void pushBack(ListNode<T>* node);
-
-
     using List::pushFront; // вместо pushFront(T obj)
     using List::pushBack;  // убрать pushFront(ListNode<T>* node) нельзя (специфика headlist)
-
-    //virtual void pushFront(T obj); // TODO: move to List  ++
-    //virtual void pushBack(T obj); // TODO: move to List   ++
 
     virtual void InsertBefore(ListNode<T>* node, T key);
     virtual void RemoveFirst();

@@ -207,7 +207,7 @@ const List<T>& List<T>::operator=(const List <T>& list) {      // ++
 
 
 
-template <typename T>
+template <typename T>            // ++
 T List<T>::getCurr() const {
     if (IsEnded()) {
         throw "there is no element";
@@ -224,7 +224,7 @@ void List<T>::reset_pCurr() {                // ++
 
 
 template <typename T>
-bool List<T>::IsEnded() const {
+bool List<T>::IsEnded() const {                  // ++
     return pCurr == pStop || pCurr == nullptr;
     // сравнение на nullptr необходимо
     // тк у пустого RingList есть только pHead
@@ -233,7 +233,7 @@ bool List<T>::IsEnded() const {
 
 
 template <typename T>
-void List<T>::Next() {
+void List<T>::Next() {                // ++
     pCurr = pCurr->next;
 }
 
@@ -312,28 +312,19 @@ void List<T>::pushBack(ListNode<T>* node) {      // ++
     pLast->next = node;
     pLast = pLast->next;
     pLast->next = pStop;
-    // в ринглисте так:
-    // то есть нужно в конце вызвать pushBack?
-    /*template <typename T>
-    void RingHeadList<T>::pushBack(ListNode<T>*node) {
-        HeadList<T>::pushBack(node);
-        pLast->next = pHead;
-        pStop = pHead;
-    };*/
-
 };
 
 
 
 
 template <typename T>
-void List<T>::pushFront(T obj) {
+void List<T>::pushFront(T obj) {           // ++
     ListNode<T>* add = new ListNode<T>(obj);
     pushFront(add);
 
 }
 template <typename T>
-void List<T>::pushBack(T obj) {
+void List<T>::pushBack(T obj) {              // ++
     ListNode<T>* add = new ListNode<T>(obj);
     pushBack(add);
 }
@@ -341,7 +332,7 @@ void List<T>::pushBack(T obj) {
 
 
 template <typename T>
-void List<T>::InsertAfter(ListNode<T>* node, T key) {            
+void List<T>::InsertAfter(ListNode<T>* node, T key) {       // ++      
     search(key);
     if (pCurr == pStop) {
         throw "cant InsertAfter not existing elem";
@@ -354,7 +345,7 @@ void List<T>::InsertAfter(ListNode<T>* node, T key) {
 };
 
 template <typename T>
-void List<T>::InsertBefore(ListNode<T>* node, T key) {      
+void List<T>::InsertBefore(ListNode<T>* node, T key) {    // ++   
     search(key);
     if (pCurr == pStop) {
         throw "this key does not exist";
@@ -369,7 +360,7 @@ void List<T>::InsertBefore(ListNode<T>* node, T key) {
 
 
 template <typename T>
-void List<T>::remove(T key) {                
+void List<T>::remove(T key) {      // ++           
     search(key);
     if (pCurr == pStop) {
         throw "this key doesnt exist";
@@ -390,7 +381,7 @@ void List<T>::remove(T key) {
 
 
 template <typename T>
-size_t List<T>::size() const {       
+size_t List<T>::size() const {       // ++ 
     ListNode<T>* curr = pFirst;
     size_t size = 0;
     while (curr != pStop) {
@@ -402,7 +393,7 @@ size_t List<T>::size() const {
 
 
 template <typename T>
-void List<T>::RemoveFirst() {          
+void List<T>::RemoveFirst() {       // ++    
     if (pFirst == nullptr) {
         throw "removing element from empty list";
     }
@@ -423,7 +414,7 @@ void List<T>::RemoveFirst() {
 
 
 template <typename T>
-bool List<T>::operator==(const List<T>& s) const {     
+bool List<T>::operator==(const List<T>& s) const {      // ++
     ListNode<T>* curr1 = pFirst, * curr2 = s.pFirst;
     while (curr1 != pStop && curr2 != s.pStop) {
         if (curr1->val != curr2->val) {
@@ -440,7 +431,7 @@ bool List<T>::operator==(const List<T>& s) const {
 
 
 template <typename T>
-bool List<T>::operator!=(const List<T>& s) const {    
+bool List<T>::operator!=(const List<T>& s) const {    // ++
     return !(*this == s);
 }
 

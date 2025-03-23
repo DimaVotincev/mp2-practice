@@ -29,7 +29,7 @@ int main()
             cout << res;
             
             cout << "ѕосчитать значение при конкретных x y z?\n";
-            cout << "(\t1 - да       0 -  нет)\n";
+            cout << "(\t1 - да       2 -  нет)\n";
             cin >> oper;
             cin.ignore();
             if (oper == '1') {
@@ -51,11 +51,11 @@ int main()
             else  if (oper == '2') {
                 break;
             } else {
-                return 1;
+                return 0;
             }
         }             
     }
-    return 1;
+    return 0;
 }
 
 
