@@ -221,8 +221,9 @@ Polinom Polinom::operator*(double c)
 
 
 
-Polinom Polinom::operator+(Polinom& p)
-{
+Polinom Polinom::operator+(const Polinom& p1)
+{ 
+    Polinom p = p1;
     if (this == &p) {
         polinom.reset_pCurr();
         Polinom answ(*this);
@@ -256,7 +257,7 @@ Polinom Polinom::operator+(Polinom& p)
 }
 
 
-Polinom Polinom::operator-(Polinom& p)
+Polinom Polinom::operator-(const Polinom& p)
 {
     if (*this == p) {
         return Polinom();
@@ -270,8 +271,9 @@ Polinom Polinom::operator-(Polinom& p)
 
 
 
-Polinom Polinom::operator*(Polinom& p)  // TODO: реализуем вставку в упорядоченный список (отдельный метод) ++
+Polinom Polinom::operator*(const Polinom& p1)  // TODO: реализуем вставку в упорядоченный список (отдельный метод) ++
 {
+    Polinom p = p1;
     // сам на себя
     if (this == &p) {
         polinom.reset_pCurr();
