@@ -24,9 +24,9 @@ public:
 
     double operator()(double x, double y, double z) ;
 
-    Polinom operator+(Polinom& p); 
-    Polinom operator-(Polinom& p);    
-    Polinom operator*(Polinom& p);   
+    Polinom operator+(Polinom& p); // TODO: const Polinom&
+    Polinom operator-(Polinom& p); // TODO: const Polinom&
+    Polinom operator*(Polinom& p); // TODO: const Polinom&
 
     Polinom operator+(const Monom& p);
     Polinom operator-(const Monom& p); 

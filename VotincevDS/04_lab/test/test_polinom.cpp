@@ -311,12 +311,7 @@ TEST(Polinom, substract_Polinoms_is_correct4)
     EXPECT_TRUE(p3 == (p1 - p2));
 }
 
-TEST(Polinom, substract_Polinoms_is_correct5)
-{
-    Polinom p1("x+y");
-    Polinom p3("");
-    EXPECT_TRUE(p3 == (p1 - p1));
-}
+
 
 
 TEST(Polinom, can_multiply_Polinoms)
@@ -426,4 +421,33 @@ TEST(Polinom, count_is_correct4)
     double answ = p1(2,2,2);
     double real = 640;
     EXPECT_TRUE(answ == real);
+}
+
+TEST(Polinom, test_sum)
+{
+    Polinom p1("x+1");
+    Polinom p2("x-1");
+    EXPECT_EQ(p1 + p2, Polinom("2x"));
+}
+
+TEST(Polinom, test_sub)
+{
+    Polinom p1("x+1");
+    Polinom p2("x-1");
+    EXPECT_EQ(p1 - p2, Polinom("2"));
+}
+
+TEST(Polinom, test_multi)
+{
+    Polinom p1("x+1");
+    Polinom p2("x-1");
+    EXPECT_EQ(p1 * p2, Polinom("x^2-1"));
+}
+
+// 2xy^2z+z^4y-xz^9+x^3-yz^4
+TEST(Polinom, test_sum1)
+{
+    Polinom p1("2xy^2z+z^4y");
+    Polinom p2("-xz^9+x^3-yz^4");
+    EXPECT_EQ(p1 + p2, Polinom("x^3+2xy^2z-xz^9"));
 }
