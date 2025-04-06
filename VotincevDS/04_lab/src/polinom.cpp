@@ -62,7 +62,8 @@ Polinom::Polinom() {
 
 Polinom::Polinom(const string& str) {
     name = str;
-    vector<string> monoms = ArithmeticExpression::ArithmeticExpression(str).convert(str);
+    vector<string> monoms = 
+    ArithmeticExpression::ArithmeticExpression(str).convert(str);
     int sgn = 1, signs_counter = 0;
 
     if (monoms.size() == 0) {
@@ -99,7 +100,8 @@ Polinom::Polinom(const string& str) {
             strMonom += "y^0";
             string tmp_coeff;
             int j = 0;
-            while (!is_xyz(strMonom[j]) && j < strMonom.size())
+            while (!is_xyz(strMonom[j]) && 
+                j < strMonom.size())
             {
                 tmp_coeff += strMonom[j];
                 j++;
@@ -196,7 +198,7 @@ Polinom Polinom::operator*(const Monom& p) {
 }
 
 
-Polinom Polinom::operator+(double c) // TODO: polinom + monom ++
+Polinom Polinom::operator+(double c)
 {
     return *this + Monom(c, 0);
 }
@@ -271,7 +273,7 @@ Polinom Polinom::operator-(const Polinom& p)
 
 
 
-Polinom Polinom::operator*(const Polinom& p1)  // TODO: реализуем вставку в упорядоченный список (отдельный метод) ++
+Polinom Polinom::operator*(const Polinom& p1)
 {
     Polinom p = p1;
     // сам на себя
@@ -313,7 +315,7 @@ Polinom Polinom::operator*(const Polinom& p1)  // TODO: реализуем вставку в упор
 
 
 
-bool Polinom::operator==(const Polinom& p) const {  // TODO: сравнение мономов ++
+bool Polinom::operator==(const Polinom& p) const { 
     return this->polinom == p.polinom;
 }
 

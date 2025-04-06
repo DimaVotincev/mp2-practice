@@ -65,7 +65,7 @@ public:
 };
 
 
-template <typename T>      // ++
+template <typename T>
 List<T>::List() {               
     pFirst = nullptr;
     pCurr = pFirst;
@@ -77,7 +77,7 @@ List<T>::List() {
 
 
 template <typename T>
-List<T>::List(const T& x) {                 // ++    
+List<T>::List(const T& x) {
     pFirst = new ListNode<T>(x);
     pCurr = pFirst;
     pPrev = nullptr;
@@ -88,7 +88,7 @@ List<T>::List(const T& x) {                 // ++
 
 
 template <typename T>
-List<T>::List(const List<T>& list) : List() {         // ++
+List<T>::List(const List<T>& list) : List() {
     if (list.pFirst == nullptr) {
         return;
     }
@@ -114,7 +114,7 @@ List<T>::List(const List<T>& list) : List() {         // ++
 }
 
 template <typename T>
-List<T>::List(const ListNode<T>* node) : List() {       // ++       
+List<T>::List(const ListNode<T>* node) : List() {
     if (node == nullptr) {
         return;
     }
@@ -138,7 +138,7 @@ List<T>::List(const ListNode<T>* node) : List() {       // ++
 
 
 template <typename T>
-List<T>::~List() {        // ++      
+List<T>::~List() {
     if (pFirst == nullptr) {
         return;
     }
@@ -159,19 +159,12 @@ List<T>::~List() {        // ++
     pLast = nullptr;
 }
 
-
-
-
-
 template <typename T>
-const List<T>& List<T>::operator=(const List <T>& list) {      // ++      
+const List<T>& List<T>::operator=(const List <T>& list) {
     if (this == &list)
     {
         return *this;
     }
-
-
-    // TODO: clear list    ++
     if (pFirst) {
         pCurr = pFirst;
         while (pCurr != pStop) {
@@ -205,9 +198,7 @@ const List<T>& List<T>::operator=(const List <T>& list) {      // ++
     return *this;
 }
 
-
-
-template <typename T>            // ++
+template <typename T> 
 T List<T>::getCurr() const {
     if (IsEnded()) {
         throw "there is no element";
@@ -215,43 +206,34 @@ T List<T>::getCurr() const {
     return pCurr->val;
 }
 
-
 template <typename T>
-void List<T>::reset_pCurr() {                // ++
+void List<T>::reset_pCurr() {
     pCurr = pFirst;
     pPrev = pStop;
 }
 
-
 template <typename T>
-bool List<T>::IsEnded() const {                  // ++
+bool List<T>::IsEnded() const {
     return pCurr == pStop || pCurr == nullptr;
-    // сравнение на nullptr необходимо
-    // тк у пустого RingList есть только pHead
-    // и нет pFirst => нет pCurr , они nullptr
 }
 
-
 template <typename T>
-void List<T>::Next() {                // ++
+void List<T>::Next() {
     pCurr = pCurr->next;
 }
 
-
 template <typename T>
-T List<T>::get_val() const {           // ++         
+T List<T>::get_val() const {
     return pFirst->val;
 }
 
-
 template <typename T>
-ListNode<T>* List<T>::get_pFirst() const {     // ++
+ListNode<T>* List<T>::get_pFirst() const {
     return pFirst;
 }
 
-
 template <typename T>
-ListNode<T>* List<T>::search(T key) {       // ++
+ListNode<T>* List<T>::search(T key) {
     if (pFirst == nullptr)
     {
         return nullptr;
@@ -270,16 +252,14 @@ ListNode<T>* List<T>::search(T key) {       // ++
     return pCurr;
 };
 
-
 template <typename T>
-void List<T>::push(const T& key) {         // ++
+void List<T>::push(const T& key) {
     ListNode<T>* tmp = new ListNode<T>(key);
     pushFront(tmp);
 }
 
-
 template <typename T>
-void List<T>::pushFront(ListNode<T>* node) {       // ++
+void List<T>::pushFront(ListNode<T>* node) {
     if (node == nullptr) {
         throw "cant push null node in front";
     }
@@ -297,12 +277,10 @@ void List<T>::pushFront(ListNode<T>* node) {       // ++
     pPrev = pStop;
 };
 
-
-
 template <typename T>
-void List<T>::pushBack(ListNode<T>* node) {      // ++
+void List<T>::pushBack(ListNode<T>* node) {
     if (node == nullptr) {
-        throw "cant pushBack empty node";  // TODO: throw ++
+        throw "cant pushBack empty node";
     }
     if (pFirst == nullptr) {
         this->pushFront(node);
@@ -314,25 +292,20 @@ void List<T>::pushBack(ListNode<T>* node) {      // ++
     pLast->next = pStop;
 };
 
-
-
-
 template <typename T>
-void List<T>::pushFront(T obj) {           // ++
+void List<T>::pushFront(T obj) { 
     ListNode<T>* add = new ListNode<T>(obj);
     pushFront(add);
 
 }
 template <typename T>
-void List<T>::pushBack(T obj) {              // ++
+void List<T>::pushBack(T obj) {
     ListNode<T>* add = new ListNode<T>(obj);
     pushBack(add);
 }
 
-
-
 template <typename T>
-void List<T>::InsertAfter(ListNode<T>* node, T key) {       // ++      
+void List<T>::InsertAfter(ListNode<T>* node, T key) {
     search(key);
     if (pCurr == pStop) {
         throw "cant InsertAfter not existing elem";
@@ -345,7 +318,7 @@ void List<T>::InsertAfter(ListNode<T>* node, T key) {       // ++
 };
 
 template <typename T>
-void List<T>::InsertBefore(ListNode<T>* node, T key) {    // ++   
+void List<T>::InsertBefore(ListNode<T>* node, T key) {
     search(key);
     if (pCurr == pStop) {
         throw "this key does not exist";
@@ -360,7 +333,7 @@ void List<T>::InsertBefore(ListNode<T>* node, T key) {    // ++
 
 
 template <typename T>
-void List<T>::remove(T key) {      // ++           
+void List<T>::remove(T key) {
     search(key);
     if (pCurr == pStop) {
         throw "this key doesnt exist";
@@ -377,11 +350,8 @@ void List<T>::remove(T key) {      // ++
     reset_pCurr();
 };
 
-
-
-
 template <typename T>
-size_t List<T>::size() const {       // ++ 
+size_t List<T>::size() const { 
     ListNode<T>* curr = pFirst;
     size_t size = 0;
     while (curr != pStop) {
@@ -391,9 +361,8 @@ size_t List<T>::size() const {       // ++
     return size;
 };
 
-
 template <typename T>
-void List<T>::RemoveFirst() {       // ++    
+void List<T>::RemoveFirst() {
     if (pFirst == nullptr) {
         throw "removing element from empty list";
     }
@@ -412,26 +381,27 @@ void List<T>::RemoveFirst() {       // ++
     reset_pCurr();
 }
 
-
 template <typename T>
-bool List<T>::operator==(const List<T>& s) const {      // ++
+bool List<T>::operator==(const List<T>& s) const {
+
     ListNode<T>* curr1 = pFirst, * curr2 = s.pFirst;
+
     while (curr1 != pStop && curr2 != s.pStop) {
+
         if (curr1->val != curr2->val) {
             return 0;
         }
-        curr1 = curr1->next;
-        curr2 = curr2->next;
-    }
-    if (curr1 == pStop && curr2 == s.pStop) {
-        return 1;
-    }
-    return 0;
-}
-
+        curr1 = curr1->next; 
+        curr2 = curr2->next; 
+    } 
+    if (curr1 == pStop && curr2 == s.pStop) { 
+        return 1; 
+    } 
+    return 0; 
+} 
+ 
 
 template <typename T>
-bool List<T>::operator!=(const List<T>& s) const {    // ++
+bool List<T>::operator!=(const List<T>& s) const {
     return !(*this == s);
 }
-
