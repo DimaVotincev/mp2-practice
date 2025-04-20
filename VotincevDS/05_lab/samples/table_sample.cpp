@@ -2,6 +2,7 @@
 #include "general_functions.h"
 #include "polinom.h"
 #include "sort_table.h"
+#include "hash_table.h"
 using namespace std;
 
 Polinom make_op(Polinom p1, Polinom p2, char s);
@@ -26,7 +27,7 @@ int main()
     SortedTable<int, int> st(5);
     SortedTable<int, int> st2(st);
 
-
+    
 
 
 

@@ -25,15 +25,24 @@ TEST(SortedTable, can_create_SortedTable) {
 
 
 
-//TEST(SortedTable, can_create_by_ScanTable) {
-//	ScanTable<int, int> sc(2);
-//	TabRecord<int, int>* add1 = new TabRecord<int, int>(1, nullptr);
-//	TabRecord<int, int>* add2 = new TabRecord<int, int>(5, nullptr);
-//	sc.Insert(add1);
-//	sc.Insert(add2);
-//	SortedTable<int, int> st(sc);
-//	//ASSERT_NO_THROW(sc.Find(1));
-//}
+TEST(SortedTable, can_create_by_ScanTable) {
+	ScanTable<int, int> sc(3);
+	TabRecord<int, int>* add1 = new TabRecord<int, int>(8, nullptr);
+	TabRecord<int, int>* add2 = new TabRecord<int, int>(5, nullptr);
+	TabRecord<int, int>* add3 = new TabRecord<int, int>(1, nullptr);
+	sc.Insert(add1);
+	sc.Insert(add2);
+	sc.Insert(add3);
+	try
+	{
+		SortedTable<int, int> st(sc);
+		return;
+	}
+	catch (const std::exception&)
+	{
+		ADD_FAILURE();
+	}
+}
 
 TEST(SortedTable, can_create_by_SortTable) {
 	SortedTable<int, int> sc(2);

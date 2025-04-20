@@ -6,31 +6,35 @@
 template <typename Tkey, typename Tdata>
 class SortedTable : public ScanTable<Tkey,Tdata> {
 protected:
-    void sort();
+    void sort(); //++
 public:
-    
-    SortedTable(int maxsize);
-    SortedTable(const SortedTable<Tkey,Tdata>& st);
-    // SortedTable(const ScanTable<Tkey, Tdata>& sct); // как писать это чудо?
-    TabRecord<Tkey, Tdata>* Find(Tkey key);
-    void Remove(Tkey key);
-    void Insert(TabRecord<Tkey, Tdata>* tr);
+    SortedTable(int maxsize); //++
+    SortedTable(const SortedTable<Tkey,Tdata>& st); //++
+    SortedTable(const ScanTable<Tkey, Tdata>& sct);  //++
+    TabRecord<Tkey, Tdata>* Find(Tkey key);  //++
+    void Remove(Tkey key); //++
+    void Insert(TabRecord<Tkey, Tdata>* tr); //++
 };
 
 template <typename Tkey, typename Tdata>
 void SortedTable<Tkey, Tdata>::sort() {
-    //sort(recs[0],recs[this->maxsz-1]);
+    std::sort(this->recs, this->recs + this->count, 
+        [](TabRecord<Tkey, Tdata>* a, TabRecord<Tkey, Tdata>* b) {
+        return a->get_key() < b->get_key();
+    });
 }
 
 template <typename Tkey, typename Tdata>
 SortedTable<Tkey, Tdata>::SortedTable(int maxsize) 
-            : ScanTable<Tkey,Tdata>(maxsize) {          //++
-    
+            : ScanTable<Tkey,Tdata>(maxsize) {
+    for (int i = 0; i < maxsize; i++) {
+        recs[i] = nullptr;
+    }
 }
 
 template <typename Tkey, typename Tdata>
 SortedTable<Tkey, Tdata>::SortedTable(const SortedTable<Tkey, Tdata>& st)
-    : SortedTable(st.maxsz) {
+        : SortedTable(st.maxsz) {
     this->count = st.count;
     for (int i = 0; i < this->count;i++ ) {
         this->recs[i] = new TabRecord<Tkey, Tdata>(st.recs[i]->get_key(),
@@ -39,13 +43,12 @@ SortedTable<Tkey, Tdata>::SortedTable(const SortedTable<Tkey, Tdata>& st)
 }
 
 
-// как писать это  чудо?
-//template <typename Tkey, typename Tdata>
-//SortedTable<Tkey, Tdata>::SortedTable(const ScanTable<Tkey, Tdata>& sct) {
-//
-//    sct.Next();
-//}
 
+template <typename Tkey, typename Tdata>
+SortedTable<Tkey, Tdata>::SortedTable(const ScanTable<Tkey, Tdata>& sct) 
+    : ScanTable<Tkey, Tdata>(sct) {
+    this->sort();
+}
 
 
 

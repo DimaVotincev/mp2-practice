@@ -9,6 +9,7 @@ protected:
 public:
     ScanTable(int maxsize);
     ScanTable(const ScanTable<Tkey, Tdata>& st);
+    ~ScanTable();
     virtual TabRecord<Tkey, Tdata>* Find(Tkey key);
     virtual void Insert(TabRecord<Tkey, Tdata>* tr);
     virtual void Remove(Tkey key);
@@ -19,6 +20,9 @@ public:
 template <typename Tkey, typename Tdata>
 ScanTable<Tkey, Tdata>::ScanTable(int msz) : Table<Tkey,Tdata>(msz) {
     recs = new TabRecord<Tkey,Tdata>*[msz];
+    for (int i = 0; i < msz; i++) {
+        recs[i] = nullptr;
+    }
 }
 
 
@@ -32,6 +36,13 @@ ScanTable<Tkey, Tdata>::ScanTable(const ScanTable<Tkey, Tdata>& st)
     }
 }
 
+template <typename Tkey, typename Tdata>
+ScanTable<Tkey, Tdata>::~ScanTable() {
+    for (int i = 0; i < this->count; i++) {
+        delete this->recs[i];
+    }
+    delete[] recs;
+}
 
 
 template <typename Tkey, typename Tdata>
