@@ -1,5 +1,8 @@
 #pragma once
 #include "tab_record.h"
+
+// тестов нет, абстрактный
+
 template <typename Tkey, typename Tdata>
 class Table {
 protected:
