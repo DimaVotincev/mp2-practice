@@ -87,3 +87,22 @@ TEST(ScanTable, cant_remove_not_existing_key) {
 	ASSERT_ANY_THROW(sc.Remove(2));
 }
 
+// Additional hard-tests
+
+//TEST(ScanTable, sort_stays_after_removing_inserting_mix) {
+//	ScanTable<int, int> st(3);
+//
+//	st.Insert(new TabRecord<int, int>(5, nullptr)); // 5
+//	st.Insert(new TabRecord<int, int>(1, nullptr)); // 5 1
+//	st.Insert(new TabRecord<int, int>(3, nullptr)); // 5 1 3
+//	st.Remove(1); // 5 3
+//	st.Insert(new TabRecord<int, int>(4, nullptr)); // 5 3 4
+//	st.Remove(5); // 3 4
+//	st.Insert(new TabRecord<int, int>(5, nullptr)); // 3 4 5
+//	st.Remove(3); // 4 5
+//	st.Insert(new TabRecord<int, int>(10, nullptr)); // 4 5 10
+//	st.Remove(5); // 4 10
+//	st.Insert(new TabRecord<int, int>(2, nullptr)); // 4 10 2
+//	st.Find(2);
+//
+//}

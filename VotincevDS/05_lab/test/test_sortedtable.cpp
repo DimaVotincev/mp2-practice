@@ -112,3 +112,19 @@ TEST(SortedTable, cant_remove_not_existing_key) {
 	ASSERT_ANY_THROW(sc.Remove(2));
 }
 
+// Additional hard-tests
+
+//TEST(SortedTable, sort_stays_after_removing_inserting_mix) {
+//	SortedTable<int, int> sc(5);
+//	sc.Insert(new TabRecord<int, int>(5, nullptr)); // 5
+//	sc.Insert(new TabRecord<int, int>(1, nullptr)); // 1 5
+//	sc.Remove(1); // 5
+//	sc.Insert(new TabRecord<int, int>(3, nullptr)); // 3 5
+//	sc.Insert(new TabRecord<int, int>(2, nullptr)); // 2 3 5
+//	sc.Remove(5); // 2 3
+//	sc.Insert(new TabRecord<int, int>(10, nullptr)); // 2 3 10
+//	sc.Remove(3); // 2 10
+//	sc.Insert(new TabRecord<int, int>(3, nullptr)); // 2 3 10
+//	sc.Insert(new TabRecord<int, int>(11, nullptr)); // 2 3 10 11
+//	sc.Insert(new TabRecord<int, int>(1, nullptr)); // 1 2 3 10 11
+//}

@@ -60,7 +60,8 @@ TabRecord<Tkey, Tdata>* SortedTable<Tkey, Tdata>::Find(Tkey key) {
         int c = l + (r-l)/2;
         if (this->recs[c]->get_key() == key) {
             answ = recs[c];
-            break;
+            currpos = c;
+            return answ;
         }
         else if (recs[c]->get_key() < key) {
             l = c+1;
@@ -69,7 +70,7 @@ TabRecord<Tkey, Tdata>* SortedTable<Tkey, Tdata>::Find(Tkey key) {
             r = c - 1;
         }
     }
-    currpos = r;
+    currpos = r; // встаю до места, куда нужно вставить
     return answ;
 }
 
@@ -80,8 +81,8 @@ void SortedTable<Tkey, Tdata>::Remove(Tkey key) {
         throw "record with this key does not exist";
     }
     delete todel;
-    for (int i = currpos + 1; i < this->count; i++) {
-        recs[i - 1] = recs[i];
+    for (int i = currpos; i < this->count; i++) {
+        recs[i] = recs[i+1];
     }
     this->count--;
 }
@@ -104,10 +105,12 @@ void SortedTable<Tkey, Tdata>::Insert(TabRecord<Tkey, Tdata>* tr) {
         this->count++;
         return;
     }
-
-    for (int i = currpos+1; i < this->count; i++) {
-        recs[i+1] = recs[i];
-    }
-    recs[currpos+1] = tr;
     this->count++;
+    // смещаю все элементы вправо, освобождая место
+    // для элемента, который вставляем
+    for (int i = count - 1; i > currpos+1; i--) {
+        recs[i] = recs[i - 1];
+    }   
+    // элемент нужно вставить на currpos+1
+    recs[currpos+1] = tr;  
 }

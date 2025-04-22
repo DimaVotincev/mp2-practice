@@ -10,7 +10,7 @@ protected:
     int count; // текущее кол-во записей
     int currpos; // индекс текущей позиции в таблице
 public:
-    Table(int maxsize) : maxsz(maxsize), count(0), currpos(-1) {}
+    Table(int maxsize);
     virtual TabRecord<Tkey, Tdata>* Find(Tkey key) = 0;
     virtual void Insert(TabRecord<Tkey, Tdata>* tr) = 0;
     virtual void Remove(Tkey key) = 0;
@@ -21,6 +21,14 @@ public:
     bool IsEmpty() const { return count == 0; }
     bool IsFull() const { return count == maxsz; }
 };
+
+
+template <typename Tkey, typename Tdata>
+Table<Tkey, Tdata>::Table(int maxsize) : 
+    maxsz(maxsize), count(0), currpos(-1) 
+{ 
+    if (maxsize < 0) throw "maxsize must be greater than 0"; 
+}
 
 template <typename Tkey, typename Tdata>
 bool Table<Tkey, Tdata>::Reset() {

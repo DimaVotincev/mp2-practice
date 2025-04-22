@@ -5,6 +5,7 @@ template <typename Tkey, typename Tdata>
 class HashTable : public Table<Tkey,Tdata> {
 protected:
     int hashfunc(const Tkey key) { return key % this->maxsz; }
+    using Table::currpos;
     // or unsigned int
 public:
     HashTable(int maxsize);
@@ -12,5 +13,5 @@ public:
 
 template <typename Tkey, typename Tdata>
 HashTable<Tkey, Tdata>::HashTable(int maxsize) : Table<Tkey,Tdata>(maxsize)  {
-
+       
 }
