@@ -89,7 +89,7 @@ void SortedTable<Tkey, Tdata>::Remove(Tkey key) {
 
 template <typename Tkey, typename Tdata>
 void SortedTable<Tkey, Tdata>::Insert(TabRecord<Tkey, Tdata>* tr) {
-    if (count == 0) {
+    if (this->count == 0) {
         this->recs[0] = tr;
         this->count++;
         return;
@@ -108,7 +108,7 @@ void SortedTable<Tkey, Tdata>::Insert(TabRecord<Tkey, Tdata>* tr) {
     this->count++;
     // смещаю все элементы вправо, освобождая место
     // для элемента, который вставляем
-    for (int i = count - 1; i > currpos+1; i--) {
+    for (int i = this->count - 1; i > currpos+1; i--) {
         recs[i] = recs[i - 1];
     }   
     // элемент нужно вставить на currpos+1

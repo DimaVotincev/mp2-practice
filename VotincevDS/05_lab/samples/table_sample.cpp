@@ -2,14 +2,43 @@
 #include "general_functions.h"
 #include "polinom.h"
 #include "sort_table.h"
-#include "hash_table.h"
+#include "array_hash_table.h"
 using namespace std;
 
 Polinom make_op(Polinom p1, Polinom p2, char s);
 
 
 
+template <typename Tkey, typename Tdata>
+void print_tables(ScanTable<Tkey, Tdata> sct,
+    SortedTable<Tkey, Tdata> sot,
+    ArrayHashTable<Tkey, Tdata> ht) {
 
+    std::cout << "ScanTable: \n";
+    sct.Reset();
+    while (!sct.IsTabEnded()) {
+        std::cout << sct.GetCurr()->get_key() << '\n';
+        sct.Next();
+    }
+    sct.Reset();
+
+    sot.Reset();
+    std::cout << "SortTable: \n";
+    while (!sot.IsTabEnded()) {
+        std::cout << sot.GetCurr()->get_key() << '\n';
+        sot.Next();
+    }
+    sot.Reset();
+
+    ht.Reset();
+    std::cout << "HashTable: \n";
+    while (!ht.IsTabEnded()) {
+        std::cout << ht.GetCurr()->get_key() << '\n';
+        ht.Next();
+    }
+    ht.Reset();
+
+}
 
 
 
@@ -19,45 +48,21 @@ int main()
     setlocale(LC_ALL, "Russian");
     
 
-    ScanTable<int, int> ct(5);
-    ct.Find(0);
-    
+    ScanTable<int, int> sc1(2);
+    sc1.Insert(new TabRecord<int, int>(1, nullptr));
+    sc1.Insert(new TabRecord<int, int>(2, nullptr));
+    SortedTable<int, int> so1(2);
+    so1.Insert(new TabRecord<int, int>(3, nullptr));
+    so1.Insert(new TabRecord<int, int>(4, nullptr));
+    ArrayHashTable<int, int> ht1(2,3);
+    ht1.Insert(new TabRecord<int, int>(5, nullptr));
+    ht1.Insert(new TabRecord<int, int>(6, nullptr));
 
+    print_tables(sc1,so1,ht1);
 
-    SortedTable<int, int> st(5);
-    SortedTable<int, int> st2(st);
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
 
     return 0;
-
-
-
-
-
-
-
 
 
     /*Polinom p1, p2;

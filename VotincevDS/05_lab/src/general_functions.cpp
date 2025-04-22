@@ -43,12 +43,3 @@ char get_oper() {
     return oper;
 }
 
-
-
-
-template <typename Tkey, typename Tdata>
-void print_tables(ScanTable<Tkey, Tdata> sct,
-    SortedTable<Tkey, Tdata> sot,
-    ArrayHashTable<Tkey, Tdata> ht) {
-
-}
