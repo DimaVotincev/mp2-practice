@@ -60,5 +60,10 @@ bool Table<Tkey, Tdata>::IsTabEnded() {
     if (currpos == -1) {
         return 1;
     }
-    return currpos == count;  // было maxsz , теперь count
+    return currpos == count;  
+    // было maxsz , теперь count
+    // count - логичен для scan sort
+    // maxsz - логичен для hashtable (разрозненно хранятся)
+    // отсюда вывод: надо переопределять
+    // а иначе никак
 }

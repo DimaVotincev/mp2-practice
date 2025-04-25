@@ -18,7 +18,9 @@ public:
     TabRecord<Tkey, Tdata>*  GetCurr() const;
     void Insert(TabRecord<Tkey,Tdata>* tr);
     void Remove(Tkey key);
-    
+    void Next();
+    bool IsTabEnded();
+    bool Reset();
 };
 
 //bool Reset();
@@ -134,6 +136,55 @@ void ArrayHashTable<Tkey, Tdata>::Remove(Tkey key) {
     this->recs[currpos] = this->pMark;
     this->count--;
 }
+
+
+
+template <typename Tkey, typename Tdata>
+void ArrayHashTable<Tkey, Tdata>::Next() {
+    currpos++;
+
+    /*if (currpos == -1) {
+        currpos = 0;
+    }*/
+    while (currpos != this->maxsz && (recs[currpos] == nullptr ||
+        recs[currpos]->get_key() == this->pMark->get_key())) {
+        currpos++;
+    }
+
+}
+
+
+template <typename Tkey, typename Tdata>
+bool ArrayHashTable<Tkey, Tdata>::Reset() {
+    this->currpos = -1;
+    this->Next();
+    return 0;
+}
+
+
+template <typename Tkey, typename Tdata>
+bool ArrayHashTable<Tkey, Tdata>::IsTabEnded() {
+    if (currpos == -1) {
+        return 1;
+    }
+    return currpos == maxsz;
+    // было maxsz , теперь count
+    // count - логичен для scan sort
+    // maxsz - логичен для hashtable (разрозненно хранятся)
+    // отсюда вывод: надо переопределять
+    // а иначе никак
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

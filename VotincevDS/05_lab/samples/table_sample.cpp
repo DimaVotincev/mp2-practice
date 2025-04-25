@@ -34,10 +34,10 @@ void print_tables(ScanTable<Tkey, Tdata> sct,
     }
     sot.Reset();
 
-    ht.Reset();
-    std::cout << "HashTable: \n";
     
+    std::cout << "HashTable: \n";  
     //std::cout << ht; // не хочет линковаться
+    ht.Reset();
     i = 1;
     while (!ht.IsTabEnded()) {
         std::cout << i << ": " << ht.GetCurr()->get_key() << '\n';
@@ -49,15 +49,19 @@ void print_tables(ScanTable<Tkey, Tdata> sct,
 }
 
 
-void get_idtable(int& id) {
+bool get_idtable(int& id) {
 
     while (1) {
         cin >> id;
+        if (id == 5) {
+            return 1;
+        }
         if (1 <= id && id <= 4) {
-            return;
+            return 0;
         }
         cout << "Введите только цифру (1,2,3 или 4)\n";
     }
+    return 0;
     
 }
 
@@ -81,7 +85,9 @@ void get_idevent(int& id) {
 
 template <typename Tkey, typename Tdata>
 void make_opTable(Table<Tkey, Tdata>& table, int id_event,
-    TabRecord<std::string, Polinom>* record, string polinom_name) {
+    TabRecord<std::string, Polinom>* rec, string polinom_name) {
+    TabRecord<std::string, Polinom>* record;
+    record = new TabRecord<std::string, Polinom>(*rec);
     switch (id_event)
     {
     case 1:
@@ -91,7 +97,12 @@ void make_opTable(Table<Tkey, Tdata>& table, int id_event,
         table.Remove(polinom_name);
         break;
     case 3:
-        table.Find(polinom_name);
+        if (table.Find(polinom_name)) {
+            cout << " есть \n";
+        }
+        else {
+            cout << " нет  \n";
+        }
         break;
     default:
         break;
@@ -137,6 +148,14 @@ void make_opTables(int id_table, int id_event,
     case 3:
         make_opTable(ht1, id_event, record, polinom_name);
         break;
+    case 4:
+        cout << "В scan   table " << polinom_name << "  -  ";
+        make_opTable(sc1, id_event, record, polinom_name);
+        cout << "В sorted table " << polinom_name << "  -  ";
+        make_opTable(so1, id_event, record, polinom_name);
+        cout << "В hash   table " << polinom_name << "  -  ";
+        make_opTable(ht1, id_event, record, polinom_name);
+        break;
     default:
         break;
     }
@@ -151,15 +170,14 @@ int main()
     setlocale(LC_ALL, "Russian");
     
 
-    ScanTable<std::string, Polinom> sc(2);
-    /*sc1.Insert(new TabRecord<int, int>(1, nullptr));
-    sc1.Insert(new TabRecord<int, int>(2, nullptr));*/
-    SortedTable<std::string, Polinom> so(2);
-    /*so1.Insert(new TabRecord<int, int>(3, nullptr));
-    so1.Insert(new TabRecord<int, int>(4, nullptr));*/
-    ArrayHashTable<std::string, Polinom> ht(2,3);
-    /*ht1.Insert(new TabRecord<int, int>(5, nullptr));
-    ht1.Insert(new TabRecord<int, int>(6, nullptr));*/
+    ScanTable<std::string, Polinom> sc(5);
+    SortedTable<std::string, Polinom> so(5);
+    ArrayHashTable<std::string, Polinom> ht(5,3);
+
+
+    // с таблицами все работает
+    // надо теперь с полиномами забахать и все
+
 
    
     while (1) {
@@ -168,18 +186,30 @@ int main()
             1 - Scan   Table\n \\
             2 - Sorted Table\n \\
             3 - Hash   Table\n \\
-            4 - All tables\n";
-            int id_table;
-        get_idtable(id_table);
+            4 - All tables\n \\
+            5 - Начать работу с полиномами";
+        int id_table;
+        if (get_idtable(id_table) == 1) {
+            break;
+        }
         cout << "Что делаем с таблицей/таблицами\n \\
             1 - Вставка \n \\
             2 - Удаление\n \\
             3 - Поиск\n";
-            int id_event;
+
+        int id_event;
         get_idevent(id_event);
         make_opTables(id_table, id_event, sc, so, ht);
     }
     
+    while (1) {
+        cout << "Из каких двух таблиц берем полиномы?\n \\
+            Введите пару значений (например, 11)\n\\
+            1 - Scan   Table\n \\
+            2 - Sorted Table\n \\
+            3 - Hash   Table\n \\
+            4 - Завершить работу\n";
+    }
 
     
     return 0;
