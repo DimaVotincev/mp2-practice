@@ -17,7 +17,7 @@ public:
     bool Reset();
     void Next();
     virtual TabRecord<Tkey, Tdata>* GetCurr() const = 0;
-    bool IsTabEnded() { return currpos == maxsz; }
+    bool IsTabEnded();
     bool IsEmpty() const { return count == 0; }
     bool IsFull() const { return count == maxsz; }
 };
@@ -30,6 +30,8 @@ Table<Tkey, Tdata>::Table(int maxsize) :
     if (maxsize < 0) throw "maxsize must be greater than 0"; 
 }
 
+
+
 template <typename Tkey, typename Tdata>
 bool Table<Tkey, Tdata>::Reset() {
     if (currpos == -1 && this->count == 0) {
@@ -39,10 +41,24 @@ bool Table<Tkey, Tdata>::Reset() {
     return 0;
 }
 
+
+
 template <typename Tkey, typename Tdata>
 void Table<Tkey, Tdata>::Next() {
     if (IsTabEnded()) {
         throw "end reached";
     }
+    
     currpos++;
+}
+
+
+
+
+template <typename Tkey, typename Tdata>
+bool Table<Tkey, Tdata>::IsTabEnded() {
+    if (currpos == -1) {
+        return 1;
+    }
+    return currpos == count;  // было maxsz , теперь count
 }

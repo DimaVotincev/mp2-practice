@@ -1,12 +1,12 @@
 #pragma once
 #include "hash_table.h"
-
+#include <iostream>
 template <typename Tkey, typename Tdata>
 class ArrayHashTable : public HashTable<Tkey,Tdata> {
 private:
     TabRecord<Tkey, Tdata>** recs;
     TabRecord<Tkey, Tdata>* pMark = 
-        new TabRecord<Tkey, Tdata>(-1,nullptr);   // удаленная запись
+        new TabRecord<Tkey, Tdata>(Tkey(), nullptr);   // удаленная запись
     int freepos; 
     int hashstep; // параметр p
     int hashfunc2(int pos) { return (pos + hashstep) % maxsz; } 
@@ -18,7 +18,7 @@ public:
     TabRecord<Tkey, Tdata>*  GetCurr() const;
     void Insert(TabRecord<Tkey,Tdata>* tr);
     void Remove(Tkey key);
-
+    
 };
 
 //bool Reset();
@@ -43,8 +43,10 @@ ArrayHashTable<Tkey, Tdata>::ArrayHashTable
             (const ArrayHashTable<Tkey, Tdata>& ht) 
             : ArrayHashTable(ht.maxsz,ht.hashstep) { 
     this->count = ht.count;
-    for (int i = 0; i < this->count; i++) {
-        this->recs[i] = new TabRecord<Tkey, Tdata>(ht.recs[i]->get_key(),
+    for (int i = 0; i < this->maxsz; i++) {
+        if (ht.recs[i] == nullptr) { continue; }
+        Tkey k = ht.recs[i]->get_key();
+        this->recs[i] = new TabRecord<Tkey, Tdata>(k,
             ht.recs[i]->get_data());
     }
 }
@@ -132,5 +134,26 @@ void ArrayHashTable<Tkey, Tdata>::Remove(Tkey key) {
     this->recs[currpos] = this->pMark;
     this->count--;
 }
+
+
+
+
+// не хочет линковаться
+
+//friend std::ostream& operator<<(std::ostream&, ArrayHashTable<Tkey,Tdata>&);
+
+//template <typename Tkey, typename Tdata>
+//std::ostream& operator<<(std::ostream& out, ArrayHashTable<Tkey,Tdata>& ht) {
+//    int i = 1;
+//    while (!ht.IsTabEnded()) {
+//        if (ht.GetCurr() == nullptr || ht.GetCurr() != ht.pMark) {
+//            ht.Next();
+//        }
+//        out << i << ": " << ht.GetCurr()->get_key() << '\n';
+//        i++;
+//        ht.Next();
+//    }
+//    return out;
+//}
 
 
