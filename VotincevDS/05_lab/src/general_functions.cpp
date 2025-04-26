@@ -1,7 +1,38 @@
-#include <iostream>
 #include "general_functions.h"
-
+#include <iostream>
 using namespace std;
+
+
+
+
+
+
+bool get_id(int& id,int max) {
+
+    while (1) {
+        cin >> id;
+        if (1 <= id && id <= max - 1) {
+            return 0;
+        }
+        if (id == max) {
+            return 1;
+        }
+        cout << "¬ведите только цифру от 1 до " << max << '\n';
+    }
+    return 0;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
 
 bool is_digit(const char s) {
     return '0' <= s && s <= '9';
