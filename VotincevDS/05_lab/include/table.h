@@ -14,10 +14,15 @@ public:
     virtual TabRecord<Tkey, Tdata>* Find(Tkey key) = 0;
     virtual void Insert(TabRecord<Tkey, Tdata>* tr) = 0;
     virtual void Remove(Tkey key) = 0;
-    bool Reset();
-    void Next();
+
+    virtual bool Reset();      // у hash table своя перегрузка
+    virtual void Next();       // у hash table своя перегрузка
+    virtual bool IsTabEnded(); // у hash table своя перегрузка
+    // без собственных перегрузок hash table не будет работать
+    // так как у scan & sort элементы хранятся друг за другом
+    // в hash table - разрозненно
+
     virtual TabRecord<Tkey, Tdata>* GetCurr() const = 0;
-    bool IsTabEnded();
     bool IsEmpty() const { return count == 0; }
     bool IsFull() const { return count == maxsz; }
 };

@@ -7,76 +7,74 @@ using namespace std;
 
 Polinom make_op(Polinom p1, Polinom p2, char s);
 
+template <typename Tkey, typename Tdata>
+void print_table(Table<Tkey, Tdata>& table) {
+    table.Reset();
+    int i = 1;
+    while (!table.IsTabEnded()) {
+        std::cout << i << ": " << table.GetCurr()->get_key() << '\n';
+        i++;
+        table.Next();
+    }
+    table.Reset();
+}
 
+template <typename Tkey, typename Tdata>
+void fill_vect(Table<Tkey, Tdata>& table, vector<Polinom*>& v) {
+    table.Reset();
+    int i = 1;
+    while (!table.IsTabEnded()) {
+        v.push_back(table.GetCurr()->get_data());
+        i++;
+        table.Next();
+    }
+    table.Reset();
+}
 
 template <typename Tkey, typename Tdata>
 void print_tables(ScanTable<Tkey, Tdata> sct,
     SortedTable<Tkey, Tdata> sot,
     ArrayHashTable<Tkey, Tdata> ht) {
-    int i;
+
     std::cout << "ScanTable: \n";
-    sct.Reset();
-    i = 1;
-    while (!sct.IsTabEnded()) {
-        std::cout << i << ": " << sct.GetCurr()->get_key() << '\n';
-        i++;
-        sct.Next();
-    }
-    sct.Reset();
+    print_table(sct);
 
-    sot.Reset();
     std::cout << "SortTable: \n";
-    i = 1;
-    while (!sot.IsTabEnded()) {
-        std::cout << i << ": " << sot.GetCurr()->get_key() << '\n';
-        i++;
-        sot.Next();
-    }
-    sot.Reset();
+    print_table(sot);
 
-    
-    std::cout << "HashTable: \n";  
-    //std::cout << ht; // не хочет линковаться
-    ht.Reset();
-    i = 1;
-    while (!ht.IsTabEnded()) {
-        std::cout << i << ": " << ht.GetCurr()->get_key() << '\n';
-        i++;
-        ht.Next();
-    }
-    //ht.Reset();
-
+    std::cout << "HashTable: \n";
+    print_table(ht);
 }
 
 
-bool get_idtable(int& id) {
+bool get_id(int& id,int max) {
 
     while (1) {
         cin >> id;
-        if (id == 5) {
-            return 1;
-        }
-        if (1 <= id && id <= 4) {
+        if (1 <= id && id <= max - 1) {
             return 0;
         }
-        cout << "Введите только цифру (1,2,3 или 4)\n";
+        if (id == max) {
+            return 1;
+        }
+        cout << "Введите только цифру от 1 до " << max << '\n';
     }
     return 0;
     
 }
 
 
-void get_idevent(int& id) {
-
-    while (1) {
-        cin >> id;
-        if (1 <= id && id <= 3) {
-            return;
-        }
-        cout << "Введите только цифру (1,2, или 3)\n";
-    }
-
-}
+//void get_idevent(int& id) {
+//
+//    while (1) {
+//        cin >> id;
+//        if (1 <= id && id <= 3) {
+//            return;
+//        }
+//        cout << "Введите только цифру (1,2, или 3)\n";
+//    }
+//
+//}
 
 
 
@@ -149,11 +147,17 @@ void make_opTables(int id_table, int id_event,
         make_opTable(ht1, id_event, record, polinom_name);
         break;
     case 4:
-        cout << "В scan   table " << polinom_name << "  -  ";
+        if (id_event == 3) {
+            cout << "В scan   table " << polinom_name << "  -  ";
+            make_opTable(sc1, id_event, record, polinom_name);
+            cout << "В sorted table " << polinom_name << "  -  ";
+            make_opTable(so1, id_event, record, polinom_name);
+            cout << "В hash   table " << polinom_name << "  -  ";
+            make_opTable(ht1, id_event, record, polinom_name);
+            break;
+        }
         make_opTable(sc1, id_event, record, polinom_name);
-        cout << "В sorted table " << polinom_name << "  -  ";
         make_opTable(so1, id_event, record, polinom_name);
-        cout << "В hash   table " << polinom_name << "  -  ";
         make_opTable(ht1, id_event, record, polinom_name);
         break;
     default:
@@ -163,6 +167,52 @@ void make_opTables(int id_table, int id_event,
     
 }
 
+template <typename Tkey, typename Tdata>
+bool get_polinom_from_table(Polinom*& p,ScanTable<Tkey, Tdata>& sc, SortedTable<Tkey, Tdata>& so,
+    ArrayHashTable<Tkey, Tdata>& ht) {
+    cout << "Из какой таблицы берем полином?\n \
+            1 - Scan   Table\n \
+            2 - Sorted Table\n \
+            3 - Hash   Table\n \
+            4 - Завершить работу\n";
+    int id_table;
+    if (get_id(id_table, 4) == 1) {
+        return 1; // то есть надо завершить программу
+    }
+
+    // выбрал таблицу
+    // теперь из нее полином надо выбрать
+    vector<Polinom*> polinoms;
+    // это для того,чтобы полиномы вывелись списком
+    // и они лежали в порядке в этом векторе
+    // это чтобы пользователь вводил циферку
+    //а не сам полином, чтоб его выбрать
+
+    cout << "Какой полином берем?\n";
+
+    switch (id_table)
+    {
+    case 1:
+        print_table(sc);
+        fill_vect(sc, polinoms);
+        break;
+    case 2:
+        print_table(so);
+        fill_vect(so, polinoms);
+        break;
+    case 3:
+        print_table(ht);
+        fill_vect(ht, polinoms);
+        break;
+    default:
+        break;
+    }
+
+    int id_p;
+    get_id(id_p, polinoms.size());
+    p = polinoms[id_p  -1];
+    return 0;
+}
 
 
 int main()
@@ -175,40 +225,64 @@ int main()
     ArrayHashTable<std::string, Polinom> ht(5,3);
 
 
-    // с таблицами все работает
-    // надо теперь с полиномами забахать и все
+    
+    // в таблицы можно вставлять, удалять, искать элементы
 
-
+    // теперь нужно написать функцию, которая
+    // спрашивает из какой таблицы берем
+    // спрашивает какой полином берем
+    // берет этот полином и вставляет
+    // 
+    // еще функцию, которая делает операции
+    // с полиномами
+    // 
+    // сделала операцию - получила результат
+    // предлагает его пихнуть в таблицу 
+    // здесь опять же  - вопрос в какую 
+    // (по сути тот же make_opTables , но немного переделанный)
    
     while (1) {
         print_tables(sc, so, ht);
-        cout << "С какой таблицей работаем?\n \\
-            1 - Scan   Table\n \\
-            2 - Sorted Table\n \\
-            3 - Hash   Table\n \\
-            4 - All tables\n \\
-            5 - Начать работу с полиномами";
+        cout << "С какой таблицей работаем?\n \
+            1 - Scan   Table\n \
+            2 - Sorted Table\n \
+            3 - Hash   Table\n \
+            4 - All tables\n \
+            5 - Начать работу с полиномами\n";
+
         int id_table;
-        if (get_idtable(id_table) == 1) {
+        // если пользователь ввел 5 - выходим
+        if (get_id(id_table,5) == 1) {
             break;
         }
-        cout << "Что делаем с таблицей/таблицами\n \\
-            1 - Вставка \n \\
-            2 - Удаление\n \\
-            3 - Поиск\n";
+
+        cout << "Что делаем с таблицей/таблицами\n \
+            1 - Вставка \n \
+            2 - Удаление\n \
+            3 - Поиск\n \
+            4 - Начать работу с полиномами\n";
 
         int id_event;
-        get_idevent(id_event);
+        if (get_id(id_event, 4) == 1) {
+            break;
+        }
+
         make_opTables(id_table, id_event, sc, so, ht);
     }
     
     while (1) {
-        cout << "Из каких двух таблиц берем полиномы?\n \\
-            Введите пару значений (например, 11)\n\\
-            1 - Scan   Table\n \\
-            2 - Sorted Table\n \\
-            3 - Hash   Table\n \\
-            4 - Завершить работу\n";
+
+        Polinom* p1, *p2;
+        
+        if (get_polinom_from_table(p1, sc, so, ht)) {
+            break;
+        }
+
+        if (get_polinom_from_table(p2, sc, so, ht)) {
+            break;
+        }
+        cout << *p1 << "\n" << *p2 << '\n';
+        
     }
 
     
