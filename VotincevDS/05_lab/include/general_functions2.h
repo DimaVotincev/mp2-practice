@@ -318,7 +318,7 @@ bool work_with_polinoms(ScanTable<string, Polinom>& sc,
     Polinom* p1, * p2;
 
     if (get_polinom_from_table(p1, sc, so, ht)) {
-        return 0;
+        return 1;
     }
     if (get_polinom_from_table(p2, sc, so, ht)) {
         return 0;
