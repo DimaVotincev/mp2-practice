@@ -20,6 +20,7 @@ int main() {
     while (true) {
         if (flag == 0) {
             work_with_tables(sc, so, ht, flag);
+            if (flag == 2) return 0;
             if (flag == 0) continue;
         }
 
@@ -28,6 +29,5 @@ int main() {
         }
             
     }
-
     return 0;
 }

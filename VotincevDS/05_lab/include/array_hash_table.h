@@ -31,7 +31,6 @@ public:
 template <typename Tkey, typename Tdata>
 ArrayHashTable<Tkey,Tdata>::ArrayHashTable(int maxsize, int _hashstep) 
     : HashTable<Tkey,Tdata>(maxsize), hashstep(_hashstep) {
-
     recs = new TabRecord<Tkey, Tdata>* [maxsize];
     for (int i = 0; i < maxsize; i++) {
         recs[i] = nullptr;
@@ -45,6 +44,11 @@ ArrayHashTable<Tkey, Tdata>::ArrayHashTable
             : ArrayHashTable(ht.maxsz,ht.hashstep) { 
     this->count = ht.count;
     for (int i = 0; i < this->maxsz; i++) {
+        /*if (ht.recs[i] == nullptr) { continue; }
+        Tkey k = ht.recs[i]->get_key();
+        this->recs[i] = new TabRecord<Tkey, Tdata>(k,
+            ht.recs[i]->get_data());*/
+
         if (ht.recs[i] == nullptr) { continue; }
         if (ht.recs[i] == ht.pMark) {
             this->recs[i] = this->pMark;
@@ -53,6 +57,7 @@ ArrayHashTable<Tkey, Tdata>::ArrayHashTable
         Tkey k = ht.recs[i]->get_key();
         this->recs[i] = new TabRecord<Tkey, Tdata>(k,
             ht.recs[i]->get_data());
+
     }
 }
 
@@ -60,6 +65,15 @@ ArrayHashTable<Tkey, Tdata>::ArrayHashTable
 // ++
 template <typename Tkey, typename Tdata>
 ArrayHashTable<Tkey, Tdata>::~ArrayHashTable() {
+    /*for (int i = 0; i < this->count; i++) {
+        if (recs[i] == pMark) {
+            continue;
+        }
+        delete this->recs[i];
+    }
+    delete[] recs;
+    delete pMark;*/
+
     for (int i = 0; i < this->count; i++) {
         if (recs[i] == nullptr || recs[i] == pMark) {
             continue;
@@ -68,6 +82,7 @@ ArrayHashTable<Tkey, Tdata>::~ArrayHashTable() {
     }
     delete[] recs;
     delete pMark;
+
 }
 
 
@@ -113,13 +128,30 @@ void ArrayHashTable<Tkey, Tdata>::Insert(TabRecord<Tkey, Tdata>* tr) {
     }
     this->count++;
     currpos = hashfunc(tr->get_key());
+    //for (int i = 0; i < this->maxsz; i++) {
+    //    if (recs[currpos] == nullptr) { // пустая ячейка
+    //        recs[currpos] = tr;
+    //        return;
+    //    }
+    //    else if (this->recs[currpos] == pMark) { // ячейка удалена
+    //        this->recs[currpos] = tr;
+    //        return;
+    //    }
+    //    else if (recs[currpos] != nullptr) { // занята
+    //        currpos = hashfunc2(currpos);
+    //        continue;
+    //    }
+    //}
+
     for (int i = 0; i < this->maxsz; i++) {
         if (recs[currpos] == nullptr || this->recs[currpos] == pMark) {
+            recs[currpos] = tr;
             break;
         }
         currpos = hashfunc2(currpos);
     }
-    recs[currpos] = tr;
+    
+
 }
 
 template <typename Tkey, typename Tdata>
@@ -143,7 +175,7 @@ void ArrayHashTable<Tkey, Tdata>::Next() {
         currpos = 0;
     }*/
     while (currpos != this->maxsz && (recs[currpos] == nullptr ||
-            recs[currpos] == this->pMark)) {
+        recs[currpos]->get_key() == this->pMark->get_key())) {
         currpos++;
     }
 

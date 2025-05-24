@@ -177,6 +177,11 @@ bool get_polinom_from_table(Polinom*& p, ScanTable<Tkey, Tdata>& sc, SortedTable
     // а не сам полином, чтоб его выбрать
 
     cout << "Какой полином берем?\n";
+    // убрать вектор
+    // должен быть ввод полинома
+    // потом он как бы берется из всех таблиц (в которых он есть)
+    // и в которых он был - можно добавить результат
+    // 
 
     switch (id_table)
     {
@@ -215,25 +220,41 @@ void work_with_tables(ScanTable<string, Polinom>& sc,
             2 - Sorted Table\n \
             3 - Hash   Table\n \
             4 - All tables\n \
-            5 - Начать работу с полиномами\n";
+            5 - Начать работу с полиномами\n \
+            6 - Завершить работу\n";
 
     int id_table;
-    if (get_id(id_table, 5) != 1) {
-        cout << "Что делаем с таблицей/таблицами\n \
+
+    while (1) {
+        cin >> id_table;
+        if (1 <= id_table && id_table <= 6) {
+            break;
+        }      
+        cout << "Введите только цифру от 1 до 6\n";
+        cin.ignore();
+    }
+    if (id_table == 5) {
+        flag = 1;
+        return;
+    }
+
+    if (id_table == 6) {
+        flag = 2;
+        return;
+    }
+
+    cout << "Что делаем с таблицей/таблицами\n \
             1 - Вставка \n \
             2 - Удаление\n \
             3 - Поиск\n \
             4 - Начать работу с полиномами\n";
 
-        int id_event;
-        if (get_id(id_event, 4) == 1)
-            flag = 1;
-        else
-            make_opTables(id_table, id_event, sc, so, ht);
-    }
-    else {
+    int id_event;
+    if (get_id(id_event, 4) == 1)
         flag = 1;
-    }
+    else
+        make_opTables(id_table, id_event, sc, so, ht);
+
 }
 
 bool insert_result_into_tables(Polinom& res,
