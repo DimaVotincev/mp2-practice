@@ -158,52 +158,30 @@ void make_opTable(Table<Tkey, Tdata>& table, int id_event,
 template <typename Tkey, typename Tdata>
 bool get_polinom_from_table(Polinom*& p, ScanTable<Tkey, Tdata>& sc, SortedTable<Tkey, Tdata>& so,
     ArrayHashTable<Tkey, Tdata>& ht) {
-    cout << "Из какой таблицы берем полином?\n \
-            1 - Scan   Table\n \
-            2 - Sorted Table\n \
-            3 - Hash   Table\n \
-            4 - Завершить работу\n";
-    int id_table;
-    if (get_id(id_table, 4) == 1) {
-        return 1; // то есть надо завершить программу
-    }
-
-    // выбрал таблицу
-    // теперь из нее полином надо выбрать
-    vector<Polinom*> polinoms;
-    // это для того,чтобы полиномы вывелись списком
-    // и они лежали в порядке в этом векторе
-    // это чтобы пользователь вводил циферку
-    // а не сам полином, чтоб его выбрать
 
     cout << "Какой полином берем?\n";
-    // убрать вектор
-    // должен быть ввод полинома
-    // потом он как бы берется из всех таблиц (в которых он есть)
-    // и в которых он был - можно добавить результат
-    // 
+    if (std::cin.rdbuf()->in_avail() > 0) {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    string polinom_name;
+    getline(cin, polinom_name);
 
-    switch (id_table)
-    {
-    case 1:
-        print_table(sc);
-        fill_vect(sc, polinoms);
-        break;
-    case 2:
-        print_table(so);
-        fill_vect(so, polinoms);
-        break;
-    case 3:
-        print_table(ht);
-        fill_vect(ht, polinoms);
-        break;
-    default:
-        break;
+    while (sc.Find(polinom_name) == nullptr && so.Find(polinom_name) == nullptr
+        && ht.Find(polinom_name) == nullptr) {
+        cout << "Такого полинома нет ни в одной \
+            таблице,введите другой\n";
+        getline(cin, polinom_name);
+    }
+    if (sc.Find(polinom_name)) {
+        p = sc.Find(polinom_name)->get_data();
+    }
+    else if (so.Find(polinom_name)) {
+        p = so.Find(polinom_name)->get_data();
+    }
+    else if (ht.Find(polinom_name)) {
+        p = ht.Find(polinom_name)->get_data();
     }
 
-    int id_p;
-    get_id(id_p, polinoms.size());
-    p = polinoms[id_p - 1];
     return 0;
 }
 
@@ -229,7 +207,7 @@ void work_with_tables(ScanTable<string, Polinom>& sc,
         cin >> id_table;
         if (1 <= id_table && id_table <= 6) {
             break;
-        }      
+        }
         cout << "Введите только цифру от 1 до 6\n";
         cin.ignore();
     }
@@ -293,63 +271,159 @@ bool insert_result_into_tables(Polinom& res,
     return true;
 }
 
-int work_with_result_polinom(Polinom* p1, Polinom* p2,
-    ScanTable<string, Polinom>& sc,
+//int work_with_result_polinom(Polinom* p1, Polinom* p2,
+//    ScanTable<string, Polinom>& sc,
+//    SortedTable<string, Polinom>& so,
+//    ArrayHashTable<string, Polinom>& ht) {
+//    while (true) {
+//        cout << "Введите операцию\n";
+//        char oper = get_oper();
+//
+//        Polinom res = make_op(*p1, *p2, oper);
+//        cout << "Результат:\n" << res;
+//
+//        /*cout << "Посчитать значение при конкретных x y z?\n \
+//            (1 - да, 2 - нет)\n";
+//        cin >> oper;
+//        cin.ignore();
+//        if (oper == '1') {
+//            double x, y, z;
+//            cout << "Введите x y z (через пробел):\n";
+//            cin >> x >> y >> z;
+//            cout << "Результат:  " << res(x, y, z) << "\n\n";
+//        }*/
+//
+//        insert_result_into_tables(res, sc, so, ht);
+//
+//        cout << "Что делаем?\n \
+//            1 - работать с текущими полиномами\n \
+//            2 - работать с таблицами\n \
+//            3 - работать с новыми полиномами из таблиц\n \
+//            4 - завершить работу программы\n";
+//
+//        int id_answ;
+//        get_id(id_answ, 4);
+//
+//        if (id_answ == 1) continue;
+//        if (id_answ == 2) return 0;
+//        if (id_answ == 3) return 1;
+//        if (id_answ == 4) return -1;
+//    }
+//}
+
+
+
+
+void work_with_result_polinom(Polinom* p1, Polinom* p2,
+    Table<string, Polinom>& table) {
+    cout << "Введите операцию\n";
+    char oper = get_oper();
+
+    Polinom res = make_op(*p1, *p2, oper);
+    cout << "Результат:\n" << res;
+
+    /*cout << "Посчитать значение при конкретных x y z?\n \
+        (1 - да, 2 - нет)\n";
+    cin >> oper;
+    cin.ignore();
+    if (oper == '1') {
+        double x, y, z;
+        cout << "Введите x y z (через пробел):\n";
+        cin >> x >> y >> z;
+        cout << "Результат:  " << res(x, y, z) << "\n\n";
+    }*/
+    ostringstream ss;
+    ss << res;
+    string polinom_name = ss.str();
+    polinom_name.pop_back();
+    Polinom* p = new Polinom(polinom_name);
+    auto* record = new TabRecord<string, Polinom>(polinom_name, p);
+
+    table.Insert(record);
+
+}
+
+
+
+
+
+
+int work_with_polinoms(ScanTable<string, Polinom>& sc,
     SortedTable<string, Polinom>& so,
-    ArrayHashTable<string, Polinom>& ht) {
-    while (true) {
-        cout << "Введите операцию\n";
-        char oper = get_oper();
+    ArrayHashTable<string, Polinom>& ht, int& flag) {
+    Polinom* p1, * p2;
 
-        Polinom res = make_op(*p1, *p2, oper);
-        cout << "Результат:\n" << res;
+    while (1) {
 
-        cout << "Посчитать значение при конкретных x y z?\n \
-            (1 - да, 2 - нет)\n";
-        cin >> oper;
-        cin.ignore();
-        if (oper == '1') {
-            double x, y, z;
-            cout << "Введите x y z (через пробел):\n";
-            cin >> x >> y >> z;
-            cout << "Результат:  " << res(x, y, z) << "\n\n";
+        cout << "Из какой таблицы берем полином?\n \
+            1 - Scan   Table\n \
+            2 - Sorted Table\n \
+            3 - Hash   Table\n \
+            4 - Завершить работу\n";
+        int id_table;
+        if (get_id(id_table, 4) == 1) {
+            return 2; // то есть надо завершить программу
         }
 
-        insert_result_into_tables(res, sc, so, ht);
 
-        cout << "Что делаем?\n \
+        if (get_polinom_from_table(p1, sc, so, ht)) {
+            return 1;
+        }
+        if (get_polinom_from_table(p2, sc, so, ht)) {
+            return 0;
+        }
+
+
+        cout << "Ваши полиномы: \n" << *p1 << *p2;
+
+        while (1) {
+            switch (id_table)
+            {
+            case 1:
+                work_with_result_polinom(p1, p2, sc);
+                cout << "Результирующий полином был вставлен в scantable\n";
+                break;
+            case 2:
+                work_with_result_polinom(p1, p2, so);
+                cout << "Результирующий полином был вставлен в sorttable\n";
+                break;
+            case 3:
+                work_with_result_polinom(p1, p2, ht);
+                cout << "Результирующий полином был вставлен в hashtable\n";
+                break;
+            default:
+                break;
+            }
+
+
+            cout << "Что делаем?\n \
             1 - работать с текущими полиномами\n \
             2 - работать с таблицами\n \
             3 - работать с новыми полиномами из таблиц\n \
             4 - завершить работу программы\n";
 
-        int id_answ;
-        get_id(id_answ, 4);
+            int id_answ;
+            get_id(id_answ, 4);
 
-        if (id_answ == 1) continue;
-        if (id_answ == 2) return 0;
-        if (id_answ == 3) return 1;
-        if (id_answ == 4) return -1;
-    }
-}
+            if (id_answ == 1) {
+                continue;
+            }
+            if (id_answ == 2) {
+                return 1;
+            }
+            if (id_answ == 3) {
+                break;
+            }
+            if (id_answ == 4) {
+                return 2;
+            }
+        }
 
-bool work_with_polinoms(ScanTable<string, Polinom>& sc,
-    SortedTable<string, Polinom>& so,
-    ArrayHashTable<string, Polinom>& ht, int& flag) {
-    Polinom* p1, * p2;
-
-    if (get_polinom_from_table(p1, sc, so, ht)) {
-        return 1;
-    }
-    if (get_polinom_from_table(p2, sc, so, ht)) {
-        return 0;
     }
 
 
-    cout << "Ваши полиномы: \n" << *p1 << *p2;
 
-    int result = work_with_result_polinom(p1, p2, sc, so, ht);
-    if (result == 0) {
+    /*if (result == 0) {
         flag = 0;
     }
     else if (result == 1) {
@@ -358,5 +432,5 @@ bool work_with_polinoms(ScanTable<string, Polinom>& sc,
     else {
         return 1;
     }
-    return 0;
+    return 0;*/
 }

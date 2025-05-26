@@ -18,7 +18,7 @@ public:
     void Insert(TabRecord<Tkey,Tdata>* tr);
     void Remove(Tkey key);
     void Next();
-    bool IsTabEnded();
+    bool IsTabEnded() const;
     bool Reset();
 };
 
@@ -191,7 +191,7 @@ bool ArrayHashTable<Tkey, Tdata>::Reset() {
 
 
 template <typename Tkey, typename Tdata>
-bool ArrayHashTable<Tkey, Tdata>::IsTabEnded() {
+bool ArrayHashTable<Tkey, Tdata>::IsTabEnded() const {
     if (currpos == -1) {
         return 1;
     }

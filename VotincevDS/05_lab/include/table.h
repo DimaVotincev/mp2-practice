@@ -17,7 +17,7 @@ public:
 
     virtual bool Reset();      // у hash table своя перегрузка
     virtual void Next();       // у hash table своя перегрузка
-    virtual bool IsTabEnded(); // у hash table своя перегрузка
+    virtual bool IsTabEnded() const; // у hash table своя перегрузка
     // без собственных перегрузок hash table не будет работать
     // так как у scan & sort элементы хранятся друг за другом
     // в hash table - разрозненно
@@ -61,7 +61,7 @@ void Table<Tkey, Tdata>::Next() {
 
 
 template <typename Tkey, typename Tdata>
-bool Table<Tkey, Tdata>::IsTabEnded() {
+bool Table<Tkey, Tdata>::IsTabEnded() const {
     if (currpos == -1) {
         return 1;
     }
